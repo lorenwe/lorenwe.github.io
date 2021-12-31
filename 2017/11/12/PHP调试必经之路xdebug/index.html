@@ -16,48 +16,44 @@
   <title>PHP调试必经之路xdebug | Coding使我快乐</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在我刚从事PHP开发的初期，一次偶然的机会，知道PHP有一个专门用来调试的工具“xbebug”，当时就抱着好奇的心态去了解它，没想到我会用时就感觉像是打开了新世界的大门样的，现在想想还真是有点搞笑，现在开通了博客后，我就想着把我所学的全部整理成日志，若是以后遗忘了，也可以再翻出来看看，同时也是希望那些PHP初学者看到这篇文章之后能够少走一些弯路，毕竟走过的才知道这条路到底有多难！废话少说，现在就来">
-<meta name="keywords" content="PHP,Debug">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP调试必经之路xdebug">
-<meta property="og:url" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/index.html">
+<meta property="og:url" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/index.html">
 <meta property="og:site_name" content="Coding使我快乐">
 <meta property="og:description" content="在我刚从事PHP开发的初期，一次偶然的机会，知道PHP有一个专门用来调试的工具“xbebug”，当时就抱着好奇的心态去了解它，没想到我会用时就感觉像是打开了新世界的大门样的，现在想想还真是有点搞笑，现在开通了博客后，我就想着把我所学的全部整理成日志，若是以后遗忘了，也可以再翻出来看看，同时也是希望那些PHP初学者看到这篇文章之后能够少走一些弯路，毕竟走过的才知道这条路到底有多难！废话少说，现在就来">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/step1.jpg">
-<meta property="og:image" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/step2.jpg">
-<meta property="og:image" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/step3.jpg">
-<meta property="og:image" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/step4.jpg">
-<meta property="og:image" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/step5.jpg">
-<meta property="og:updated_time" content="2018-06-05T08:01:32.109Z">
+<meta property="og:locale">
+<meta property="og:image" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step1.jpg">
+<meta property="og:image" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step2.jpg">
+<meta property="og:image" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step3.jpg">
+<meta property="og:image" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step4.jpg">
+<meta property="og:image" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step5.jpg">
+<meta property="article:published_time" content="2017-11-12T05:25:51.000Z">
+<meta property="article:modified_time" content="2021-12-30T09:23:18.647Z">
+<meta property="article:author" content="Lorenwe">
+<meta property="article:tag" content="PHP,Debug">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PHP调试必经之路xdebug">
-<meta name="twitter:description" content="在我刚从事PHP开发的初期，一次偶然的机会，知道PHP有一个专门用来调试的工具“xbebug”，当时就抱着好奇的心态去了解它，没想到我会用时就感觉像是打开了新世界的大门样的，现在想想还真是有点搞笑，现在开通了博客后，我就想着把我所学的全部整理成日志，若是以后遗忘了，也可以再翻出来看看，同时也是希望那些PHP初学者看到这篇文章之后能够少走一些弯路，毕竟走过的才知道这条路到底有多难！废话少说，现在就来">
-<meta name="twitter:image" content="https://lozz.cc/2017/11/12/PHP调试必经之路xdebug/step1.jpg">
+<meta name="twitter:image" content="https://blog.kaolanet.com/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step1.jpg">
   
   
     <link rel="icon" href="/css/images/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 
   
-  <!-- baidu webmaster push -->
   <script>
-    (function(){
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        }
-        else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a00c62500bfb2c7b42daed477c49fcfd";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
     })();
   </script>
-  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-</head>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <body class="home blog custom-background custom-font-enabled single-author">
   <div id="page" class="hfeed site">
       <header id="masthead" class="site-header" role="banner">
@@ -106,22 +102,31 @@
     <div class="entry-content">
       
         <p>在我刚从事PHP开发的初期，一次偶然的机会，知道PHP有一个专门用来调试的工具“xbebug”，当时就抱着好奇的心态去了解它，没想到我会用时就感觉像是打开了新世界的大门样的，现在想想还真是有点搞笑，现在开通了博客后，我就想着把我所学的全部整理成日志，若是以后遗忘了，也可以再翻出来看看，同时也是希望那些PHP初学者看到这篇文章之后能够少走一些弯路，毕竟走过的才知道这条路到底有多难！废话少说，现在就来开始介绍PHP xdebug 本地调试以及远程调试的步骤。</p>
-<p>xdebug安装就不多做介绍了，毕竟win和linux上安装方式不一样，现在就默认已经给PHP安装好了xdebug扩展，下面是xdebug的配置文件，在php.ini文件中：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[Xdebug]  </span><br><span class="line">;指定Xdebug扩展文件的绝对路径  </span><br><span class="line">zend_extension="/usr/local/php5/zend_ext/xedbug.so"  </span><br><span class="line">;启用性能检测分析  </span><br><span class="line">xdebug.profiler_enable=on  </span><br><span class="line">;启用代码自动跟踪  </span><br><span class="line">xdebug.auto_trace=on  </span><br><span class="line">;允许收集传递给函数的参数变量  </span><br><span class="line">xdebug.collect_params=on  </span><br><span class="line">;允许收集函数调用的返回值  </span><br><span class="line">xdebug.collect_return=on  </span><br><span class="line">;指定堆栈跟踪文件的存放目录  </span><br><span class="line">xdebug.trace_output_dir="/tmp/log/php/debug"  </span><br><span class="line">;指定性能分析文件的存放目录  </span><br><span class="line">xdebug.profiler_output_dir="/tmp/log/php/debug"  </span><br><span class="line">xdebug.profiler_output_name = cachegrind.out.%t.%p</span><br></pre></td></tr></table></figure></p>
-<p>以上是本地调试的配置方式，远程调试与这大体相同，随后将奉上远程调试配置方式及详细说明，配置好了xdebug后（phpinfo能够看到xdebug扩展）接下来就来使用这个扩展来进行调试了，其中需要注意两个配置，第一就是<code>xdebug.profiler_enable</code>这个配置开启后，会在配置的性能分析文件的存放目录中自动生成cachegrind.out文件，该文件保存的是整个请求程序运行的性能分析数据，第二就是<code>xdebug.auto_trace</code>配置，该配置是开启自动代码运行跟踪，保存的是代码运行每一步的数据，开启后保存的是整个请求周期代码运行的跟踪数据，项目太大记录的数据更多那么这个文件也会相应的变大，所以一般配置时很少开启这个因为有时只需要跟踪某个函数或对象的运行情况，如果只要跟踪代码片段只需要在跟踪的代码加上以下代码即可：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xdebug_start_trace();</span><br><span class="line"> <span class="comment">//* 业务代码 *</span></span><br><span class="line">xdebug_stop_trace();</span><br></pre></td></tr></table></figure></p>
+<p>xdebug安装就不多做介绍了，毕竟win和linux上安装方式不一样，现在就默认已经给PHP安装好了xdebug扩展，下面是xdebug的配置文件，在php.ini文件中：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[Xdebug]  </span><br><span class="line">;指定Xdebug扩展文件的绝对路径  </span><br><span class="line">zend_extension=&quot;/usr/local/php5/zend_ext/xedbug.so&quot;  </span><br><span class="line">;启用性能检测分析  </span><br><span class="line">xdebug.profiler_enable=on  </span><br><span class="line">;启用代码自动跟踪  </span><br><span class="line">xdebug.auto_trace=on  </span><br><span class="line">;允许收集传递给函数的参数变量  </span><br><span class="line">xdebug.collect_params=on  </span><br><span class="line">;允许收集函数调用的返回值  </span><br><span class="line">xdebug.collect_return=on  </span><br><span class="line">;指定堆栈跟踪文件的存放目录  </span><br><span class="line">xdebug.trace_output_dir=&quot;/tmp/log/php/debug&quot;  </span><br><span class="line">;指定性能分析文件的存放目录  </span><br><span class="line">xdebug.profiler_output_dir=&quot;/tmp/log/php/debug&quot;  </span><br><span class="line">xdebug.profiler_output_name = cachegrind.out.%t.%p</span><br></pre></td></tr></table></figure>
+<p>以上是本地调试的配置方式，远程调试与这大体相同，随后将奉上远程调试配置方式及详细说明，配置好了xdebug后（phpinfo能够看到xdebug扩展）接下来就来使用这个扩展来进行调试了，其中需要注意两个配置，第一就是<code>xdebug.profiler_enable</code>这个配置开启后，会在配置的性能分析文件的存放目录中自动生成cachegrind.out文件，该文件保存的是整个请求程序运行的性能分析数据，第二就是<code>xdebug.auto_trace</code>配置，该配置是开启自动代码运行跟踪，保存的是代码运行每一步的数据，开启后保存的是整个请求周期代码运行的跟踪数据，项目太大记录的数据更多那么这个文件也会相应的变大，所以一般配置时很少开启这个因为有时只需要跟踪某个函数或对象的运行情况，如果只要跟踪代码片段只需要在跟踪的代码加上以下代码即可：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xdebug_start_trace();</span><br><span class="line"> <span class="comment">//* 业务代码 *</span></span><br><span class="line">xdebug_stop_trace();</span><br></pre></td></tr></table></figure>
 <p>值得注意的地方就是当配置 xdebug.auto_trace=on 时，xdebug_start_trace()函数会报错，所以一般配置 xdebug.auto_trace=off ,在需要跟踪的地方手动加入调试代码即可。</p>
-<p>在实际开发中还是很少用到上面的调试方式的，毕竟太麻烦了，而且xdebug输出的文件看的有点杂乱无章，无形增加了调试难度，有没有一种更友好的调试方式呢？当然有！配合IDE调试简直不要太舒服，这种调试就是俗称的远程链接调试，只不过我们开发跟服务都是在同一台电脑上，所以看起来像本地调试，但实际调试与程序之间数据是通过网络传输的，远程调试呢肯定是不能用上面的配置文件的，所以需要从新配置一个xdebug配置文件<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[Xdebug]</span><br><span class="line">;指定Xdebug扩展文件的绝对路径  </span><br><span class="line">zend_extension="/usr/local/php5/zend_ext/xedbug.so"</span><br><span class="line">;开启远程调试</span><br><span class="line">xdebug.remote_enable = on</span><br><span class="line">;关闭性能检测分析（不输出分析文件了）</span><br><span class="line">;xdebug.profiler_enable = off</span><br><span class="line">;xdebug.profiler_enable_trigger = off</span><br><span class="line">;xdebug.profiler_output_dir="D:\phpStudy\tmp\xdebug"</span><br><span class="line"></span><br><span class="line">;2.1或以上版本只支持’dbgp’作为协议,所以这个值基本是固定的</span><br><span class="line">xdebug.remote_handler = dbgp</span><br><span class="line">;调试的机器的所在ip，如果是本机开发则写localhost即可</span><br><span class="line">xdebug.remote_host = localhost</span><br><span class="line">;调试机器的端口，选择一个不被占用的端口即可</span><br><span class="line">xdebug.remote_port = 9001</span><br><span class="line">;调试IDE标识</span><br><span class="line">xdebug.idekey="PHPSTORM"</span><br></pre></td></tr></table></figure></p>
-<p>以上配置仅满足于本机当做服务器的情况下，当我的服务器是虚拟机虚拟出来的怎么办，其实一样的，改一改相应配置就行了，比如虚拟机地址是 192.168.10.10 ，本机的地址肯定就是 192.168.10.1 了，那么配置就如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">;指定Xdebug扩展文件的绝对路径  </span><br><span class="line">zend_extension="/usr/local/php5/zend_ext/xedbug.so"</span><br><span class="line">xdebug.remote_enable = on</span><br><span class="line">xdebug.remote_handler = dbgp</span><br><span class="line">xdebug.remote_host = 192.168.10.1</span><br><span class="line">xdebug.remote_port = 9001</span><br><span class="line">xdebug.idekey="PHPSTORM"</span><br></pre></td></tr></table></figure></p>
+<p>在实际开发中还是很少用到上面的调试方式的，毕竟太麻烦了，而且xdebug输出的文件看的有点杂乱无章，无形增加了调试难度，有没有一种更友好的调试方式呢？当然有！配合IDE调试简直不要太舒服，这种调试就是俗称的远程链接调试，只不过我们开发跟服务都是在同一台电脑上，所以看起来像本地调试，但实际调试与程序之间数据是通过网络传输的，远程调试呢肯定是不能用上面的配置文件的，所以需要从新配置一个xdebug配置文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[Xdebug]</span><br><span class="line">;指定Xdebug扩展文件的绝对路径  </span><br><span class="line">zend_extension=&quot;/usr/local/php5/zend_ext/xedbug.so&quot;</span><br><span class="line">;开启远程调试</span><br><span class="line">xdebug.remote_enable = on</span><br><span class="line">;关闭性能检测分析（不输出分析文件了）</span><br><span class="line">;xdebug.profiler_enable = off</span><br><span class="line">;xdebug.profiler_enable_trigger = off</span><br><span class="line">;xdebug.profiler_output_dir=&quot;D:\phpStudy\tmp\xdebug&quot;</span><br><span class="line"></span><br><span class="line">;2.1或以上版本只支持’dbgp’作为协议,所以这个值基本是固定的</span><br><span class="line">xdebug.remote_handler = dbgp</span><br><span class="line">;调试的机器的所在ip，如果是本机开发则写localhost即可</span><br><span class="line">xdebug.remote_host = localhost</span><br><span class="line">;调试机器的端口，选择一个不被占用的端口即可</span><br><span class="line">xdebug.remote_port = 9001</span><br><span class="line">;调试IDE标识</span><br><span class="line">xdebug.idekey=&quot;PHPSTORM&quot;</span><br></pre></td></tr></table></figure>
+<p>以上配置仅满足于本机当做服务器的情况下，当我的服务器是虚拟机虚拟出来的怎么办，其实一样的，改一改相应配置就行了，比如虚拟机地址是 192.168.10.10 ，本机的地址肯定就是 192.168.10.1 了，那么配置就如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">;指定Xdebug扩展文件的绝对路径  </span><br><span class="line">zend_extension=&quot;/usr/local/php5/zend_ext/xedbug.so&quot;</span><br><span class="line">xdebug.remote_enable = on</span><br><span class="line">xdebug.remote_handler = dbgp</span><br><span class="line">xdebug.remote_host = 192.168.10.1</span><br><span class="line">xdebug.remote_port = 9001</span><br><span class="line">xdebug.idekey=&quot;PHPSTORM&quot;</span><br></pre></td></tr></table></figure>
 <p>其中xdebug.remote_port配置的也是调试机器的端口，所以被占用的话就需要更换了，以上的配置虽然能进行远程调试，但是只能单独一个人进行调试，如果需要多个开发都能调试，就必须用到另外一个配置 <code>xdebug.remote_connect_back</code>，把 <code>xdebug.remote_host</code> 去掉换成 xdebug.remote_connect_back=1 即可，换成这个配置后 xdebug 是通过 HTTP 头部来获取 IP 地址，这样也就支持多人调试了，但要记住的是这个配置千万不能在生产环境中出现，为什么你懂得！正常来说生产环境应该来 xdebug 都不应该开启的，但凡事都有特殊。</p>
 <p>一切都配置完毕了后，重启服务，就开始配置IDE了，我用的是PhpStrom，所以就介绍这个了，配置起来也比较简单</p>
 <p>写好后只需要运行一遍代码就行了，对没错，可以了，要看到调试的代码到底调用关系以及函数参数怎么办呢？看到上面配置的性能分析文件目录没有，就是在那里看，打开目录里面的文件就可以看到了，是不是感觉这样看的好难受，根本就没有像其他语言调试那种快感，要达到这种要求，就需要引入IDE了，我用的是PhpStrom，应该没有哪个phper不知道这个的吧，像其他的比如Sublime Text我也用来调试过，都没有PhpStrom这么爽，所以下面来介绍PhpStrom配置吧，配置这种描述是描述不清楚的，上图：</p>
-<p><img src="/2017/11/12/PHP调试必经之路xdebug/step1.jpg" alt="docker"><br><img src="/2017/11/12/PHP调试必经之路xdebug/step2.jpg" alt="docker"><br><img src="/2017/11/12/PHP调试必经之路xdebug/step3.jpg" alt="docker"><br><img src="/2017/11/12/PHP调试必经之路xdebug/step4.jpg" alt="docker"><br><img src="/2017/11/12/PHP调试必经之路xdebug/step5.jpg" alt="docker"></p>
+<img src="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step1.jpg" class="" title="[PHP调试必经之路xdebug]">
+<img src="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step2.jpg" class="" title="[PHP调试必经之路xdebug]">
+<img src="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step3.jpg" class="" title="[PHP调试必经之路xdebug]">
+<img src="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step4.jpg" class="" title="[PHP调试必经之路xdebug]">
+<img src="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/step5.jpg" class="" title="[PHP调试必经之路xdebug]">
+
 <p>配置 DBGp Proxy 的 Host 时候如果是远程服务器就需要填上远程服务器的 IP 地址，比如上面 xdebug 配置了一个 192.168.10.10 的远程服务器，那么此时这里的 host 就应该填上 192.168.10.10，其中配置 Server 的时候也需要特别注意，如果是本机做服务器的话就不需要配置目录映射，也就是在 Absolute path on the server 不需要填写内容，如果是通过远程服务器或者虚拟机做服务器的话就需要填上源码在远程服务器上的绝对路径，自此一切配置都以完成，就可以开始打上断点愉快的调试代码<br>了 ^v^ …</p>
 
       
     </div><!-- .entry-content -->
 
     <footer class="entry-meta">
-    <a href="/2017/11/12/PHP调试必经之路xdebug/">
+    <a href="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/">
     <time datetime="2017-11-12T05:25:51.000Z" class="entry-date">
         2017-11-12
     </time>
@@ -129,11 +134,13 @@
     
     
   <span class="article-delim">&#8226;</span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP-Debug/">PHP,Debug</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP-Debug/" rel="tag">PHP,Debug</a></li></ul>
 
-    <span id="busuanzi_container_page_pv">
-      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
-    </span>
+    
+      <span id="busuanzi_container_page_pv">
+        本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+      </span>
+    
     </footer>
 </article>
 
@@ -142,7 +149,7 @@
 <nav class="nav-single">
     <h3 class="assistive-text">文章导航</h3>
     
-        <span class="nav-previous"><a href="/2017/11/14/composer笔记/" rel="prev"><span class="meta-nav">←</span> composer 笔记</a></span>
+        <span class="nav-previous"><a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/" rel="prev"><span class="meta-nav">←</span> composer 笔记</a></span>
     
     
 </nav><!-- .nav-single -->
@@ -174,23 +181,23 @@
       <ul>
         
           <li>
-            <a href="/2018/05/16/Dockerfile编写规则/">Dockerfile编写规则</a>
+            <a href="/2018/05/16/Dockerfile%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99/">Dockerfile编写规则</a>
           </li>
         
           <li>
-            <a href="/2017/11/16/Docke入门笔记/">Docke入门笔记</a>
+            <a href="/2017/11/16/Docke%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/">Docke入门笔记</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/PHP中的匿名函数和闭包/">PHP中的匿名函数和闭包</a>
+            <a href="/2017/11/15/PHP%E4%B8%AD%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">PHP中的匿名函数和闭包</a>
           </li>
         
           <li>
-            <a href="/2017/11/14/composer笔记/">composer 笔记</a>
+            <a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/">composer 笔记</a>
           </li>
         
           <li>
-            <a href="/2017/11/12/PHP调试必经之路xdebug/">PHP调试必经之路xdebug</a>
+            <a href="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/">PHP调试必经之路xdebug</a>
           </li>
         
       </ul>
@@ -202,7 +209,7 @@
   <aside class="widget">
     <h3 class="widget-title">Tags</h3>
     <div class="widget-content">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-Debug/">PHP,Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/composer/">composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-Debug/" rel="tag">PHP,Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/composer/" rel="tag">composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </aside>
 
@@ -219,9 +226,14 @@
 </div> -->
       </div>
       <footer id="colophon" role="contentinfo">
-    <p>&copy; 2018 Loren
+    <p>&copy; 2021 Lorenwe
     All rights reserved.</p>
-    <p>Hosted by &mdash; <a href="https://pages.coding.me" target="_blank">Coding Pages</a></p>
+    <p>
+      <span>本网站由由
+        <a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank" title="又拍云">
+          <img height="30" style="margin-bottom: -11px" src="/css/images/ypyun_logo.png">
+        </a>提供加速服务</span>
+    </p>
     <p>
         <span id="busuanzi_container_site_uv" style='display:none'>
             本站总访问量<span id="busuanzi_value_site_uv"></span>次
@@ -231,11 +243,17 @@
     <script src="/js/jquery-2.0.3.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
 <script src="/js/navigation.js"></script>
 

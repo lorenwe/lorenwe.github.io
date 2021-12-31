@@ -16,42 +16,38 @@
   <title>composer 笔记 | Coding使我快乐</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="一、composer 安装1、局部安装在composer 中国官网 上下载 composer.phar 文件到工作目录上述下载 Composer 的过程正确执行完毕后，可以将 composer.phar 文件复制到任意目录（比如项目根目录下），然后通过 php composer.phar 指令即可使用 Composer 了！全局安装全局安装是将 Composer 安装到系统环境变量 PATH 所包">
-<meta name="keywords" content="composer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="composer 笔记">
-<meta property="og:url" content="https://lozz.cc/2017/11/14/composer笔记/index.html">
+<meta property="og:url" content="https://blog.kaolanet.com/2017/11/14/composer%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Coding使我快乐">
 <meta property="og:description" content="一、composer 安装1、局部安装在composer 中国官网 上下载 composer.phar 文件到工作目录上述下载 Composer 的过程正确执行完毕后，可以将 composer.phar 文件复制到任意目录（比如项目根目录下），然后通过 php composer.phar 指令即可使用 Composer 了！全局安装全局安装是将 Composer 安装到系统环境变量 PATH 所包">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-05T08:01:32.178Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-14T06:33:51.000Z">
+<meta property="article:modified_time" content="2021-12-30T07:34:45.789Z">
+<meta property="article:author" content="Lorenwe">
+<meta property="article:tag" content="composer">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="composer 笔记">
-<meta name="twitter:description" content="一、composer 安装1、局部安装在composer 中国官网 上下载 composer.phar 文件到工作目录上述下载 Composer 的过程正确执行完毕后，可以将 composer.phar 文件复制到任意目录（比如项目根目录下），然后通过 php composer.phar 指令即可使用 Composer 了！全局安装全局安装是将 Composer 安装到系统环境变量 PATH 所包">
   
   
     <link rel="icon" href="/css/images/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 
   
-  <!-- baidu webmaster push -->
   <script>
-    (function(){
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        }
-        else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a00c62500bfb2c7b42daed477c49fcfd";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
     })();
   </script>
-  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-</head>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <body class="home blog custom-background custom-font-enabled single-author">
   <div id="page" class="hfeed site">
       <header id="masthead" class="site-header" role="banner">
@@ -99,22 +95,29 @@
 
     <div class="entry-content">
       
-        <h3 id="一、composer-安装"><a href="#一、composer-安装" class="headerlink" title="一、composer 安装"></a>一、composer 安装</h3><h4 id="1、局部安装"><a href="#1、局部安装" class="headerlink" title="1、局部安装"></a>1、局部安装</h4><p>在<a href="http://www.phpcomposer.com/" target="_blank" rel="external">composer 中国官网</a> 上下载 <code>composer.phar</code> 文件到工作目录<br>上述下载 Composer 的过程正确执行完毕后，可以将 composer.phar 文件复制到任意目录（比如项目根目录下），然后通过 php composer.phar 指令即可使用 Composer 了！<br>全局安装<br>全局安装是将 Composer 安装到系统环境变量 PATH 所包含的路径下面，然后就能够在命令行窗口中直接执行 composer 命令了。<br>Mac 或 Linux 系统：</p>
+        <h3 id="一、composer-安装"><a href="#一、composer-安装" class="headerlink" title="一、composer 安装"></a>一、composer 安装</h3><h4 id="1、局部安装"><a href="#1、局部安装" class="headerlink" title="1、局部安装"></a>1、局部安装</h4><p>在<a target="_blank" rel="noopener" href="http://www.phpcomposer.com/">composer 中国官网</a> 上下载 <code>composer.phar</code> 文件到工作目录<br>上述下载 Composer 的过程正确执行完毕后，可以将 composer.phar 文件复制到任意目录（比如项目根目录下），然后通过 php composer.phar 指令即可使用 Composer 了！<br>全局安装<br>全局安装是将 Composer 安装到系统环境变量 PATH 所包含的路径下面，然后就能够在命令行窗口中直接执行 composer 命令了。<br>Mac 或 Linux 系统：</p>
 <p>打开命令行窗口并执行如下命令将前面下载的 composer.phar 文件移动到 /usr/local/bin/ 目录下面：</p>
 <p>复制<br>sudo mv composer.phar /usr/local/bin/composer<br>Windows 系统：</p>
-<p>找到并进入 PHP 的安装目录（和你在命令行中执行的 php 指令应该是同一套 PHP）。<br>将 composer.phar 复制到 PHP 的安装目录下面，也就是和 php.exe 在同一级目录。<br>在 PHP 安装目录下新建一个 composer.bat 文件，并将下列代码保存到此文件中。<br>复制<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@php "%~dp0composer.phar" %*</span><br></pre></td></tr></table></figure></p>
+<p>找到并进入 PHP 的安装目录（和你在命令行中执行的 php 指令应该是同一套 PHP）。<br>将 composer.phar 复制到 PHP 的安装目录下面，也就是和 php.exe 在同一级目录。<br>在 PHP 安装目录下新建一个 composer.bat 文件，并将下列代码保存到此文件中。<br>复制</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@php &quot;%~dp0composer.phar&quot; %*</span><br></pre></td></tr></table></figure>
 <p>最后重新打开一个命令行窗口试一试执行 composer –version 看看是否正确输出版本号。</p>
 <p>不要忘了经常执行 composer selfupdate 以保持 Composer 一直是最新版本哦！</p>
-<p>composer 查看配置命令<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config -gl</span><br></pre></td></tr></table></figure></p>
-<p>配置中国镜像源<br>修改 composer 的全局配置文件（推荐方式）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config -g repo.packagist composer https://packagist.phpcomposer.com</span><br></pre></td></tr></table></figure></p>
-<p>修改当前项目的 composer.json 配置文件（只对当前项目生效）<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config repo.packagist composer https://packagist.phpcomposer.com</span><br></pre></td></tr></table></figure></p>
-<p>或者在composer.json文件中手工添加<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">"repositories": &#123;</span><br><span class="line">    "packagist": &#123;</span><br><span class="line">        "type": "composer",</span><br><span class="line">        "url": "https://packagist.phpcomposer.com"</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>composer 查看配置命令 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config -gl</span><br></pre></td></tr></table></figure>
+<p>配置中国镜像源<br>修改 composer 的全局配置文件（推荐方式）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config -g repo.packagist composer https://packagist.phpcomposer.com</span><br></pre></td></tr></table></figure>
+<p>修改当前项目的 composer.json 配置文件（只对当前项目生效）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer config repo.packagist composer https://packagist.phpcomposer.com</span><br></pre></td></tr></table></figure>
+<p>或者在composer.json文件中手工添加</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;repositories&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;packagist&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;composer&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;url&quot;</span>: <span class="string">&quot;https://packagist.phpcomposer.com&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 
       
     </div><!-- .entry-content -->
 
     <footer class="entry-meta">
-    <a href="/2017/11/14/composer笔记/">
+    <a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/">
     <time datetime="2017-11-14T06:33:51.000Z" class="entry-date">
         2017-11-14
     </time>
@@ -122,11 +125,13 @@
     
     
   <span class="article-delim">&#8226;</span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/composer/">composer</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/composer/" rel="tag">composer</a></li></ul>
 
-    <span id="busuanzi_container_page_pv">
-      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
-    </span>
+    
+      <span id="busuanzi_container_page_pv">
+        本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+      </span>
+    
     </footer>
 </article>
 
@@ -135,10 +140,10 @@
 <nav class="nav-single">
     <h3 class="assistive-text">文章导航</h3>
     
-        <span class="nav-previous"><a href="/2017/11/15/PHP中的匿名函数和闭包/" rel="prev"><span class="meta-nav">←</span> PHP中的匿名函数和闭包</a></span>
+        <span class="nav-previous"><a href="/2017/11/15/PHP%E4%B8%AD%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/" rel="prev"><span class="meta-nav">←</span> PHP中的匿名函数和闭包</a></span>
     
     
-        <span class="nav-next"><a href="/2017/11/12/PHP调试必经之路xdebug/" rel="next">PHP调试必经之路xdebug <span class="meta-nav">→</span></a></span>
+        <span class="nav-next"><a href="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/" rel="next">PHP调试必经之路xdebug <span class="meta-nav">→</span></a></span>
     
 </nav><!-- .nav-single -->
 
@@ -169,23 +174,23 @@
       <ul>
         
           <li>
-            <a href="/2018/05/16/Dockerfile编写规则/">Dockerfile编写规则</a>
+            <a href="/2018/05/16/Dockerfile%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99/">Dockerfile编写规则</a>
           </li>
         
           <li>
-            <a href="/2017/11/16/Docke入门笔记/">Docke入门笔记</a>
+            <a href="/2017/11/16/Docke%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/">Docke入门笔记</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/PHP中的匿名函数和闭包/">PHP中的匿名函数和闭包</a>
+            <a href="/2017/11/15/PHP%E4%B8%AD%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">PHP中的匿名函数和闭包</a>
           </li>
         
           <li>
-            <a href="/2017/11/14/composer笔记/">composer 笔记</a>
+            <a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/">composer 笔记</a>
           </li>
         
           <li>
-            <a href="/2017/11/12/PHP调试必经之路xdebug/">PHP调试必经之路xdebug</a>
+            <a href="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/">PHP调试必经之路xdebug</a>
           </li>
         
       </ul>
@@ -197,7 +202,7 @@
   <aside class="widget">
     <h3 class="widget-title">Tags</h3>
     <div class="widget-content">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-Debug/">PHP,Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/composer/">composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-Debug/" rel="tag">PHP,Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/composer/" rel="tag">composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </aside>
 
@@ -214,9 +219,14 @@
 </div> -->
       </div>
       <footer id="colophon" role="contentinfo">
-    <p>&copy; 2018 Loren
+    <p>&copy; 2021 Lorenwe
     All rights reserved.</p>
-    <p>Hosted by &mdash; <a href="https://pages.coding.me" target="_blank">Coding Pages</a></p>
+    <p>
+      <span>本网站由由
+        <a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank" title="又拍云">
+          <img height="30" style="margin-bottom: -11px" src="/css/images/ypyun_logo.png">
+        </a>提供加速服务</span>
+    </p>
     <p>
         <span id="busuanzi_container_site_uv" style='display:none'>
             本站总访问量<span id="busuanzi_value_site_uv"></span>次
@@ -226,11 +236,17 @@
     <script src="/js/jquery-2.0.3.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
 <script src="/js/navigation.js"></script>
 

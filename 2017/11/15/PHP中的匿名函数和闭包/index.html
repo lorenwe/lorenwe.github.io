@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   
   
-  <meta name="description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义：123$closureFunc = function()&amp;#123;		return true;&amp;#125;;
- e" />
+  <meta name="description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义：
+123$closureFunc = function()&amp;#123;		return true;&amp;#125;;
+ " />
   
 
   
@@ -16,43 +17,39 @@
   
   <title>PHP中的匿名函数和闭包 | Coding使我快乐</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义：123$closureFunc = function()&amp;#123;		return true;&amp;#125;;  eg: 把匿名函数赋值给变量，通过变量来调用12345$closureFunc = function(">
-<meta name="keywords" content="PHP">
+  <meta name="description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义： 123$closureFunc &#x3D; function()&amp;#123;		return true;&amp;#125;;  eg: 把匿名函数赋值给变量，通过变量来调用 12345$closureFunc &#x3D; functio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PHP中的匿名函数和闭包">
-<meta property="og:url" content="https://lozz.cc/2017/11/15/PHP中的匿名函数和闭包/index.html">
+<meta property="og:url" content="https://blog.kaolanet.com/2017/11/15/PHP%E4%B8%AD%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/index.html">
 <meta property="og:site_name" content="Coding使我快乐">
-<meta property="og:description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义：123$closureFunc = function()&amp;#123;		return true;&amp;#125;;  eg: 把匿名函数赋值给变量，通过变量来调用12345$closureFunc = function(">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-05T08:01:32.107Z">
+<meta property="og:description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义： 123$closureFunc &#x3D; function()&amp;#123;		return true;&amp;#125;;  eg: 把匿名函数赋值给变量，通过变量来调用 12345$closureFunc &#x3D; functio">
+<meta property="og:locale">
+<meta property="article:published_time" content="2017-11-15T06:51:20.000Z">
+<meta property="article:modified_time" content="2021-12-30T07:34:45.784Z">
+<meta property="article:author" content="Lorenwe">
+<meta property="article:tag" content="PHP">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PHP中的匿名函数和闭包">
-<meta name="twitter:description" content="一：匿名函数 (在php5.3.0 或以上才能使用)php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。匿名函数的定义：123$closureFunc = function()&amp;#123;		return true;&amp;#125;;  eg: 把匿名函数赋值给变量，通过变量来调用12345$closureFunc = function(">
   
   
     <link rel="icon" href="/css/images/favicon.ico">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 
   
-  <!-- baidu webmaster push -->
   <script>
-    (function(){
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        }
-        else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a00c62500bfb2c7b42daed477c49fcfd";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
     })();
   </script>
-  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-</head>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
 <body class="home blog custom-background custom-font-enabled single-author">
   <div id="page" class="hfeed site">
       <header id="masthead" class="site-header" role="banner">
@@ -100,22 +97,26 @@
 
     <div class="entry-content">
       
-        <h5 id="一：匿名函数-在php5-3-0-或以上才能使用"><a href="#一：匿名函数-在php5-3-0-或以上才能使用" class="headerlink" title="一：匿名函数 (在php5.3.0 或以上才能使用)"></a>一：匿名函数 (在php5.3.0 或以上才能使用)</h5><p>php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。<br>匿名函数的定义：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$closureFunc = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p> eg: 把匿名函数赋值给变量，通过变量来调用<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$closureFunc = <span class="function"><span class="keyword">function</span><span class="params">($str)</span></span>&#123;</span><br><span class="line">　　 <span class="keyword">echo</span> $str;</span><br><span class="line">&#125;;</span><br><span class="line">$closureFunc(<span class="string">"hello world!"</span>);</span><br><span class="line"><span class="comment">//  输出： hello world!</span></span><br></pre></td></tr></table></figure></p>
-<h5 id="二：闭包"><a href="#二：闭包" class="headerlink" title="二：闭包"></a>二：闭包</h5><h6 id="2-1-将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包"><a href="#2-1-将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包" class="headerlink" title="2.1  将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包"></a>2.1  将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包</h6><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">closureFunc1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    $func = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"hello"</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    $func();</span><br><span class="line">&#125;</span><br><span class="line">closureFunc1();</span><br><span class="line"><span class="comment">//输出: hello</span></span><br></pre></td></tr></table></figure>
-<h6 id="2-2-在匿名函数中引用局部变量"><a href="#2-2-在匿名函数中引用局部变量" class="headerlink" title="2.2  在匿名函数中引用局部变量"></a>2.2  在匿名函数中引用局部变量</h6><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">closureFunc2</span><span class="params">()</span></span>&#123;</span><br><span class="line">    $num = <span class="number">1</span>;</span><br><span class="line">    $func = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> $num;</span><br><span class="line">    &#125;;</span><br><span class="line">    $func();</span><br><span class="line">&#125;</span><br><span class="line">closureFunc2();</span><br><span class="line"><span class="comment">//Notice: Undefined variable: num</span></span><br></pre></td></tr></table></figure>
-<p>如果经常写js代码看到这个的话应该会感到很奇怪，因为类似的代码放在js里面一切都是那么的合理，根本就没有报错的理由。那是因为js语言是自动封装应用状态的，在php中，必须手动调用bindTo()方法或者使用use关键字把状态附加到php闭包中。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enclosePerson</span> <span class="params">($name)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">($doCommand)</span> <span class="title">use</span> <span class="params">($name)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> sprintf(<span class="string">'%s, %s'</span>, $name, $doCommand);</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 把字符串“Clay”封装在闭包中</span></span><br><span class="line">$clay = enclosePerson(<span class="string">'Clay'</span>);</span><br><span class="line"><span class="comment">// 传入参数，调用闭包</span></span><br><span class="line"><span class="keyword">echo</span> $clay(<span class="string">'get me sweet tea!'</span>);</span><br><span class="line"><span class="comment">// 输出 --&gt; “Clay， get me sweet tea!”</span></span><br></pre></td></tr></table></figure></p>
+        <h5 id="一：匿名函数-在php5-3-0-或以上才能使用"><a href="#一：匿名函数-在php5-3-0-或以上才能使用" class="headerlink" title="一：匿名函数 (在php5.3.0 或以上才能使用)"></a>一：匿名函数 (在php5.3.0 或以上才能使用)</h5><p>php中的匿名函数， 也叫闭包函数(closures), 允许指定一个没有名称的函数。最常用的就是回调函数的参数值。<br>匿名函数的定义：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$closureFunc</span> = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p> eg: 把匿名函数赋值给变量，通过变量来调用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$closureFunc</span> = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="variable">$str</span></span>)</span>&#123;</span><br><span class="line">　　 <span class="keyword">echo</span> <span class="variable">$str</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="variable">$closureFunc</span>(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line"><span class="comment">//  输出： hello world!</span></span><br></pre></td></tr></table></figure>
+<h5 id="二：闭包"><a href="#二：闭包" class="headerlink" title="二：闭包"></a>二：闭包</h5><h6 id="2-1-将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包"><a href="#2-1-将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包" class="headerlink" title="2.1  将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包"></a>2.1  将匿名函数放在普通函数中，也可以将匿名函数返回，这就构成了一个简单的闭包</h6><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">closureFunc1</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="variable">$func</span> = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="variable">$func</span>();</span><br><span class="line">&#125;</span><br><span class="line">closureFunc1();</span><br><span class="line"><span class="comment">//输出: hello</span></span><br></pre></td></tr></table></figure>
+<h6 id="2-2-在匿名函数中引用局部变量"><a href="#2-2-在匿名函数中引用局部变量" class="headerlink" title="2.2  在匿名函数中引用局部变量"></a>2.2  在匿名函数中引用局部变量</h6><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">closureFunc2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="variable">$num</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="variable">$func</span> = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$num</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="variable">$func</span>();</span><br><span class="line">&#125;</span><br><span class="line">closureFunc2();</span><br><span class="line"><span class="comment">//Notice: Undefined variable: num</span></span><br></pre></td></tr></table></figure>
+<p>如果经常写js代码看到这个的话应该会感到很奇怪，因为类似的代码放在js里面一切都是那么的合理，根本就没有报错的理由。那是因为js语言是自动封装应用状态的，在php中，必须手动调用bindTo()方法或者使用use关键字把状态附加到php闭包中。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">enclosePerson</span> (<span class="params"><span class="variable">$name</span></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$doCommand</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$name</span></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> sprintf(<span class="string">&#x27;%s, %s&#x27;</span>, <span class="variable">$name</span>, <span class="variable">$doCommand</span>);</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 把字符串“Clay”封装在闭包中</span></span><br><span class="line"><span class="variable">$clay</span> = enclosePerson(<span class="string">&#x27;Clay&#x27;</span>);</span><br><span class="line"><span class="comment">// 传入参数，调用闭包</span></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$clay</span>(<span class="string">&#x27;get me sweet tea!&#x27;</span>);</span><br><span class="line"><span class="comment">// 输出 --&gt; “Clay， get me sweet tea!”</span></span><br></pre></td></tr></table></figure>
 <p>可以看到在生成闭包的时候把变量附加到闭包中，那么在调用闭包时那个变量值依然存在并且不能被改变。</p>
 <p>php的闭包是对象，与其他php对象类似，每个闭包实例都可以使用 $this 关键字来获取闭包内部状态，闭包的大部分状态是没什么用的，但有一个bindTo()方法为闭包添加一些有趣的潜力，可以使用这个方法把Closure对象的内部状态绑定到其他对象上。没看懂是吗？我来用通俗易懂的话来说一遍，通过这个bindTo()方法可以把其他对象的$this绑定到闭包对象中，那么就能在闭包对象中访问到被绑定的对象的受保护的属性。举个栗子：</p>
 <p>下面的例子是一些框架中路由实现的mini版，仅为说明bindTo()的作用及用法。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> $routes = <span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">protected</span> $responseStatus = <span class="string">'200 OK'</span>;</span><br><span class="line">	<span class="keyword">protected</span> $responseContentType = <span class="string">'text/html'</span>;</span><br><span class="line">	<span class="keyword">protected</span> $responseBody = <span class="string">'hello word'</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addRoute</span><span class="params">($routePath, $routeCallback)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;routes[$routePath] = $routeCallback-&gt;bindTo(<span class="keyword">$this</span>, <span class="keyword">__CLASS__</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span><span class="params">($currentPath)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;routes <span class="keyword">as</span> $routePath =&gt; $callback)&#123;</span><br><span class="line">			<span class="keyword">if</span> ($routePath === $CurrentPath) &#123;</span><br><span class="line">				$callback();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		header(<span class="string">'HTTP/1.1'</span> . <span class="keyword">$this</span>-&gt;$responseStatus);</span><br><span class="line">		header(<span class="string">'Content-type:'</span> . <span class="keyword">$this</span>-&gt;$responseContentType);</span><br><span class="line">		header(<span class="string">'Content-length:'</span> . <span class="keyword">$this</span>-&gt;$responseBody);</span><br><span class="line">		<span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;$responseBody;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">	<span class="keyword">protected</span> <span class="variable">$routes</span> = <span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">protected</span> <span class="variable">$responseStatus</span> = <span class="string">&#x27;200 OK&#x27;</span>;</span><br><span class="line">	<span class="keyword">protected</span> <span class="variable">$responseContentType</span> = <span class="string">&#x27;text/html&#x27;</span>;</span><br><span class="line">	<span class="keyword">protected</span> <span class="variable">$responseBody</span> = <span class="string">&#x27;hello word&#x27;</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addRoute</span>(<span class="params"><span class="variable">$routePath</span>, <span class="variable">$routeCallback</span></span>)</span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">$this</span>-&gt;routes[<span class="variable">$routePath</span>] = <span class="variable">$routeCallback</span>-&gt;bindTo(<span class="keyword">$this</span>, <span class="keyword">__CLASS__</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params"><span class="variable">$currentPath</span></span>)</span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;routes <span class="keyword">as</span> <span class="variable">$routePath</span> =&gt; <span class="variable">$callback</span>)&#123;</span><br><span class="line">			<span class="keyword">if</span> (<span class="variable">$routePath</span> === <span class="variable">$CurrentPath</span>) &#123;</span><br><span class="line">				<span class="variable">$callback</span>();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		header(<span class="string">&#x27;HTTP/1.1&#x27;</span> . <span class="keyword">$this</span>-&gt;<span class="variable">$responseStatus</span>);</span><br><span class="line">		header(<span class="string">&#x27;Content-type:&#x27;</span> . <span class="keyword">$this</span>-&gt;<span class="variable">$responseContentType</span>);</span><br><span class="line">		header(<span class="string">&#x27;Content-length:&#x27;</span> . <span class="keyword">$this</span>-&gt;<span class="variable">$responseBody</span>);</span><br><span class="line">		<span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;<span class="variable">$responseBody</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，addRoute方法是用来添加（注册）路由的，注册的同时会要求传如一个闭包函数，那么在注册的同时就通过bindTo()方法绑定了App实例的$this，bindTo()方法第二个参数的作用就是指定需要绑定闭包对象的那个实例所属的PHP类。</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$app = <span class="keyword">new</span> App();</span><br><span class="line">$app-&gt;addRoute(<span class="string">'/user/info'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">$this</span>-&gt;$responseContentType = <span class="string">'application/json;charset=utf8'</span>;</span><br><span class="line">	<span class="keyword">$this</span>-&gt;$responseBody = <span class="string">'&#123;'</span>name<span class="string">': '</span>july<span class="string">'&#125;'</span>;</span><br><span class="line">&#125;);</span><br><span class="line">$app-&gt;dispatch(<span class="string">'/user/info'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$app</span> = <span class="keyword">new</span> App();</span><br><span class="line"><span class="variable">$app</span>-&gt;addRoute(<span class="string">&#x27;/user/info&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">$this</span>-&gt;<span class="variable">$responseContentType</span> = <span class="string">&#x27;application/json;charset=utf8&#x27;</span>;</span><br><span class="line">	<span class="keyword">$this</span>-&gt;<span class="variable">$responseBody</span> = <span class="string">&#x27;&#123;&#x27;</span>name<span class="string">&#x27;: &#x27;</span>july<span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="variable">$app</span>-&gt;dispatch(<span class="string">&#x27;/user/info&#x27;</span>);</span><br></pre></td></tr></table></figure>
       
     </div><!-- .entry-content -->
 
     <footer class="entry-meta">
-    <a href="/2017/11/15/PHP中的匿名函数和闭包/">
+    <a href="/2017/11/15/PHP%E4%B8%AD%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">
     <time datetime="2017-11-15T06:51:20.000Z" class="entry-date">
         2017-11-15
     </time>
@@ -123,11 +124,13 @@
     
     
   <span class="article-delim">&#8226;</span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/" rel="tag">PHP</a></li></ul>
 
-    <span id="busuanzi_container_page_pv">
-      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
-    </span>
+    
+      <span id="busuanzi_container_page_pv">
+        本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+      </span>
+    
     </footer>
 </article>
 
@@ -136,10 +139,10 @@
 <nav class="nav-single">
     <h3 class="assistive-text">文章导航</h3>
     
-        <span class="nav-previous"><a href="/2017/11/16/Docke入门笔记/" rel="prev"><span class="meta-nav">←</span> Docke入门笔记</a></span>
+        <span class="nav-previous"><a href="/2017/11/16/Docke%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/" rel="prev"><span class="meta-nav">←</span> Docke入门笔记</a></span>
     
     
-        <span class="nav-next"><a href="/2017/11/14/composer笔记/" rel="next">composer 笔记 <span class="meta-nav">→</span></a></span>
+        <span class="nav-next"><a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/" rel="next">composer 笔记 <span class="meta-nav">→</span></a></span>
     
 </nav><!-- .nav-single -->
 
@@ -170,23 +173,23 @@
       <ul>
         
           <li>
-            <a href="/2018/05/16/Dockerfile编写规则/">Dockerfile编写规则</a>
+            <a href="/2018/05/16/Dockerfile%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99/">Dockerfile编写规则</a>
           </li>
         
           <li>
-            <a href="/2017/11/16/Docke入门笔记/">Docke入门笔记</a>
+            <a href="/2017/11/16/Docke%E5%85%A5%E9%97%A8%E7%AC%94%E8%AE%B0/">Docke入门笔记</a>
           </li>
         
           <li>
-            <a href="/2017/11/15/PHP中的匿名函数和闭包/">PHP中的匿名函数和闭包</a>
+            <a href="/2017/11/15/PHP%E4%B8%AD%E7%9A%84%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E5%92%8C%E9%97%AD%E5%8C%85/">PHP中的匿名函数和闭包</a>
           </li>
         
           <li>
-            <a href="/2017/11/14/composer笔记/">composer 笔记</a>
+            <a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/">composer 笔记</a>
           </li>
         
           <li>
-            <a href="/2017/11/12/PHP调试必经之路xdebug/">PHP调试必经之路xdebug</a>
+            <a href="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/">PHP调试必经之路xdebug</a>
           </li>
         
       </ul>
@@ -198,7 +201,7 @@
   <aside class="widget">
     <h3 class="widget-title">Tags</h3>
     <div class="widget-content">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-Debug/">PHP,Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/composer/">composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/" rel="tag">PHP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP-Debug/" rel="tag">PHP,Debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/composer/" rel="tag">composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </aside>
 
@@ -215,9 +218,14 @@
 </div> -->
       </div>
       <footer id="colophon" role="contentinfo">
-    <p>&copy; 2018 Loren
+    <p>&copy; 2021 Lorenwe
     All rights reserved.</p>
-    <p>Hosted by &mdash; <a href="https://pages.coding.me" target="_blank">Coding Pages</a></p>
+    <p>
+      <span>本网站由由
+        <a href="https://www.upyun.com/?utm_source=lianmeng&amp;utm_medium=referral" target="_blank" title="又拍云">
+          <img height="30" style="margin-bottom: -11px" src="/css/images/ypyun_logo.png">
+        </a>提供加速服务</span>
+    </p>
     <p>
         <span id="busuanzi_container_site_uv" style='display:none'>
             本站总访问量<span id="busuanzi_value_site_uv"></span>次
@@ -227,11 +235,17 @@
     <script src="/js/jquery-2.0.3.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
 <script src="/js/navigation.js"></script>
 
