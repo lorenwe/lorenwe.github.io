@@ -73,6 +73,135 @@
       <div id="main" class="wrapper">
         <div id="primary" class="site-content"><div id="content" role="main">
   
+    <article id="post-win10配置多个Github账号" class="post-win10配置多个Github账号 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/">win10配置多个Github账号</a>
+    </h1>
+  
+
+        
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h3 id="一、为什么要配置多个Git账号"><a href="#一、为什么要配置多个Git账号" class="headerlink" title="一、为什么要配置多个Git账号"></a>一、为什么要配置多个Git账号</h3><p>文章写于2021年的最后一天，最近闲来无事，想搞个导航网站，至于为什么要自己搞，纯属兴趣，既然是兴趣，就想着不要投入太大，整个省心省力的方案，github pages走起，问题就来了，一个github账号只能CANAME一个域名，我刚好挂了一个博客，其他的仓库要pages就只能在我的博客域名后面跟上仓库名这样访问，这很不程序员，所以我就又注册了一个github账号，现在在我的win10电脑上就要使用两个github账户了，当我在我的电脑上给新注册的仓库推送代码时就会出现当前用户没有权限访问，至此，就只能想办法配置好多个用户访问了，其实实际工作中也会遇见这个问题，比如自己肯定有github账户，开发公司项目的时候可能会有公司的gitlab账户或者其他代码仓库的账户，如果是使用http方式拉取代码还好，账户密码一输，记住密码也就没有后续问题了，但如果是使用ssh拉取代码就懵逼了，今天就是来解决这个问题的</p>
+<h3 id="二、初始化Git配置"><a href="#二、初始化Git配置" class="headerlink" title="二、初始化Git配置"></a>二、初始化Git配置</h3><p>默认我们都是已经使用了很久git，肯定做过很多设置了，为解决上面这个问题呢主要就是让git不再以一个用户身份对仓库进行更改，而是让它自动的选择对应的用户身份去操作代码仓库，只要用户身份和仓库对应上了，就没有权限问题啦，那就开干吧！</p>
+<h5 id="1-去除全局用户配置"><a href="#1-去除全局用户配置" class="headerlink" title="1.去除全局用户配置"></a>1.去除全局用户配置</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 设置全局用户名</span></span><br><span class="line">git config --golbal user.name &quot;XXX&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置全局邮箱</span></span><br><span class="line">git config --golbal user.email &quot;xxx@aa.com&quot;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看全局用户名</span></span><br><span class="line">git config --global user.name</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看全局邮箱</span></span><br><span class="line">git config --global user.email</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看全局密码</span></span><br><span class="line">git config --global user.password</span><br></pre></td></tr></table></figure>
+
+<p>移除全局配置的用户信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 移除全局配置账户</span></span><br><span class="line">git config --global --unset user.name</span><br><span class="line"><span class="meta">#</span><span class="bash"> 移除全局配置邮箱</span></span><br><span class="line">git config --global --unset user.email</span><br><span class="line"><span class="meta">#</span><span class="bash"> 移除全局密码</span></span><br><span class="line">git config --global --unset user.password</span><br></pre></td></tr></table></figure>
+
+<p>如果上述命令执行有问题的话其实还可以自行更改git配置文件来实现</p>
+<p>如：找到<code>C:\Users\Administrator\.gitconfig</code>文件，用文本编辑器打开找到<code>[user]</code>这一栏把所有的用户及邮箱信息删掉，就像这样：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[user]</span></span><br><span class="line"><span class="section">[http]</span></span><br><span class="line">	<span class="attr">sslVerify</span> = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来运行命令来检查一下配置是否成功 <code>git config --list</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git config --list</span></span><br><span class="line">core.symlinks=false</span><br><span class="line">core.autocrlf=true</span><br><span class="line">core.fscache=true</span><br><span class="line">color.diff=auto</span><br><span class="line">color.status=auto</span><br><span class="line">color.branch=auto</span><br><span class="line">color.interactive=true</span><br><span class="line">help.format=html</span><br><span class="line">rebase.autosquash=true</span><br><span class="line">http.sslbackend=openssl</span><br><span class="line">http.sslcainfo=C:/Program Files/Git/mingw64/ssl/certs/ca-bundle.crt</span><br><span class="line">credential.helper=manager</span><br><span class="line">http.sslverify=false</span><br></pre></td></tr></table></figure>
+
+<p>没有看到用户信息就算完成了</p>
+<h5 id="2-生成密钥对"><a href="#2-生成密钥对" class="headerlink" title="2.生成密钥对"></a>2.生成密钥对</h5><p>因为是要通过ssh来推拉仓库，故我们要先生成ssh的key，生成的命令也很简单 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;lorenwe@163.com&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在这先声明一下自己的用户体系，以后后面搞混乱了，我原来自有一个github账户名是lorenwe，现在又注册了一个名为lorenwe2的账户（取名是个麻烦事），邮箱呢都是用的163的，所以两个账户的邮箱是<a href="mailto:&#x6c;&#111;&#114;&#101;&#110;&#119;&#101;&#64;&#x31;&#x36;&#51;&#46;&#99;&#111;&#109;">&#x6c;&#111;&#114;&#101;&#110;&#119;&#101;&#64;&#x31;&#x36;&#51;&#46;&#99;&#111;&#109;</a>和<a href="mailto:&#x6c;&#x6f;&#x72;&#101;&#x6e;&#119;&#x65;&#50;&#64;&#49;&#x36;&#51;&#x2e;&#99;&#x6f;&#x6d;">&#x6c;&#x6f;&#x72;&#101;&#x6e;&#119;&#x65;&#50;&#64;&#49;&#x36;&#51;&#x2e;&#99;&#x6f;&#x6d;</a>，接下来就是不同的操作来啦</p>
+<p>注意上面那条命令 <code>ssh-keygen -t rsa -C &quot;lorenwe@163.com&quot;</code> 执行完后会在用户目录也就是<code>C:\Users\Administrator</code> 目录的 <code>.ssh</code> 目录里面生成两个文件名为 id_rsa 和 id_rsa.pub 的两个文件，如果在执行命令前就有的话可能你之前已经配置了ssh key，如果知道key对应配置哪个网站的话，可以删除从新配置，如果不支持重新配置的话就不建议删除了，</p>
+<p>可以使用这个命令生成指定文件名的密钥对 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C &quot;lorenwe@163.com&quot; -f id_rsa_lorenwe</span><br></pre></td></tr></table></figure>
+
+<p>现在我们不指定，也就是说生成了上面所说的两个文件，然后对这两个文件进行重命名，为了好区分我就直接在后面加上用户名了，现在文件结构如下：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/ssh_lorenwe.png" class="" title="[SSH设置]">
+
+<p>接下来就是为第二个用户生成 ssh key，重复以上操作即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/.ssh</span><br><span class="line"><span class="meta">$</span><span class="bash"> ssh-keygen -t rsa -C <span class="string">&quot;lorenwe2@163.com&quot;</span> -f id_rsa_lorenwe2</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter passphrase (empty for no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved in id_rsa_lorenwe2.</span><br><span class="line">Your public key has been saved in id_rsa_lorenwe2.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:DwTCt/KL3YvvLEA9AFj/8BCGyRj/00EJLM4KXe+TCZk lorenwe2@163.com</span><br><span class="line">The key&#x27;s randomart image is:</span><br><span class="line">+---[RSA 2048]----+</span><br><span class="line">|.*o*=.o.         |</span><br><span class="line">|o.=o=+o.         |</span><br><span class="line">| +.o+B...        |</span><br><span class="line">|. +.E*=o         |</span><br><span class="line">|.. .o=++S        |</span><br><span class="line">|.   ..*  o       |</span><br><span class="line">|     + +  .      |</span><br><span class="line">|    . +o.        |</span><br><span class="line">|      .+=.       |</span><br><span class="line">+----[SHA256]-----+</span><br></pre></td></tr></table></figure>
+
+<p>注意使用 <code>-f</code> 指定生成文件名时需要让命令行处于在 .ssh 目录下，因为指定文件名后生成的文件就处于命令行所在的文件夹，在 .ssh 目录下省去了再去移动文件这一步，现在我们的文件目录结构为：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/ssh_lorenwe2.png" class="" title="[SSH设置]">
+
+<p>至此准备工作完成了。</p>
+<h3 id="三、配置Github的-SSH"><a href="#三、配置Github的-SSH" class="headerlink" title="三、配置Github的 SSH"></a>三、配置Github的 SSH</h3><ol>
+<li><p>用户 lorenwe 登录 GitHub，进入【Settings】-【SSH and GPG keys】，如下截图：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/github_step1.png" class="" title="[github步骤]"></li>
+<li><p>点击【New SSH key】按钮，进入新建SSH key页面，复制 id_rsa_lorenwe.pub 文件内容粘贴到大框框中，如下配图：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/github_step2.png" class="" title="[github步骤]">
+
+<p>Title随便取一个，我这取的是邮箱，这样配置完了就知道我这个密钥是给哪个用户配置的</p>
+</li>
+<li><p>打开另外一个浏览器登入lorenwe2 账户重复一遍上面操作即可，至此GitHub配置完成了，同样的道理我们也可以配置其他站点的 ssh key，如 gitee 等</p>
+</li>
+</ol>
+<h3 id="四、测试配置是否成功"><a href="#四、测试配置是否成功" class="headerlink" title="四、测试配置是否成功"></a>四、测试配置是否成功</h3><p>可以执行下面的命令来测试密钥配置，需要注意的是测试命令需要自己指定要使用的是哪个key，因为在.ssh目录下面有两个key，默认是使用id_rsa来验证的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com -i ~/.ssh/id_rsa_lorenwe</span><br><span class="line">Hi lorenwe! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">ssh -T git@github.com -i ~/.ssh/id_rsa_lorenwe2</span><br><span class="line">Hi lorenwe2! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p>看到 successfully 就说明成功了</p>
+<h3 id="五、Git配置不同站点使用不同用户"><a href="#五、Git配置不同站点使用不同用户" class="headerlink" title="五、Git配置不同站点使用不同用户"></a>五、Git配置不同站点使用不同用户</h3><p>还是在.ssh目录下，创建一个文件名为 config 的文件，注意不带后缀，不是config.txt和config.ini，不带后缀就叫config，编辑器打开然后输入以下内容：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置user1</span></span><br><span class="line">Host lorenwe.github.com</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile C:\\Users\\Administrator\\.ssh\\id_rsa_lorenwe</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">User lorenwe</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置user2</span></span><br><span class="line">Host lorenwe2.github.com</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile C:\\Users\\Administrator\\.ssh\\id_rsa_lorenwe2</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">User lorenwe2</span><br></pre></td></tr></table></figure>
+
+<p>假如你还要配置公司内部的gitlab用户，那么可以按照下面的配置来修改</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置user3</span></span><br><span class="line">Host 192.168.12.5</span><br><span class="line">Hostname 192.168.12.5</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">IdentityFile C:\\Users\\Administrator\\.ssh\\id_rsa_gitlab</span><br><span class="line">User gitlab_name</span><br></pre></td></tr></table></figure>
+
+<p>最后.ssh目录的文件结构如下图：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/ssh_list.png" class="" title="[SSH目录]">
+
+<h3 id="六、使用需要注意的地方"><a href="#六、使用需要注意的地方" class="headerlink" title="六、使用需要注意的地方"></a>六、使用需要注意的地方</h3><p>在github上创建好一个仓库，创建好后如下：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/github6.png" class="" title="[github仓库]">
+
+<p>注意到 仓库 clone 路径 ssh的方式 </p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git@github.com:lorenwe2/lorenwe2.git</span><br></pre></td></tr></table></figure>
+
+<p>使用以下命令clone会发现出错了，具体如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test</span><br><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> git@github.com:lorenwe2/lorenwe2.git</span></span><br><span class="line">Cloning into &#x27;lorenwe2&#x27;...</span><br><span class="line">git@github.com: Permission denied (publickey).</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br></pre></td></tr></table></figure>
+
+<p>原因就是之前配置的config中是以下配置</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置user1</span></span><br><span class="line">Host lorenwe.github.com</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile C:\\Users\\Administrator\\.ssh\\id_rsa_lorenwe</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">User lorenwe</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置user2</span></span><br><span class="line">Host lorenwe2.github.com</span><br><span class="line">HostName github.com</span><br><span class="line">IdentityFile C:\\Users\\Administrator\\.ssh\\id_rsa_lorenwe2</span><br><span class="line">PreferredAuthentications publickey</span><br><span class="line">User lorenwe2</span><br></pre></td></tr></table></figure>
+
+<p>两个用户的 HostName 都一样，git就从你给的clone链接里面拿到的host name也是github.com，这时候它就不知道要用哪个用户来clone了，解决办法很简单，把host再具体一点，如：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test</span><br><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> git@lorenwe2.github.com:lorenwe2/lorenwe2.git</span></span><br><span class="line">Cloning into &#x27;lorenwe2&#x27;...</span><br><span class="line">warning: You appear to have cloned an empty repository.</span><br></pre></td></tr></table></figure>
+
+<p>上面就clone 成功了，只是clone了一个空仓库，我们只是在github.com前面加上了用户名，那就刚好对应上了上面config配置的Host，git 就知道要用哪个用户去clone仓库了，配置里面还定义的key的路径，那key也正确，所以就正常clone下来了，再测试一下推送功能吧</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test</span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> lorenwe2/</span></span><br><span class="line"></span><br><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git status</span></span><br><span class="line">On branch master</span><br><span class="line"></span><br><span class="line">No commits yet</span><br><span class="line"></span><br><span class="line">Untracked files:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)</span><br><span class="line"></span><br><span class="line">        test.txt</span><br><span class="line"></span><br><span class="line">nothing added to commit but untracked files present (use &quot;git add&quot; to track)</span><br><span class="line"></span><br><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git add -A</span></span><br><span class="line"></span><br><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">&quot;添加文件&quot;</span></span></span><br><span class="line"></span><br><span class="line">*** Please tell me who you are.</span><br><span class="line"></span><br><span class="line">Run</span><br><span class="line"></span><br><span class="line">  git config --global user.email &quot;you@example.com&quot;</span><br><span class="line">  git config --global user.name &quot;Your Name&quot;</span><br><span class="line"></span><br><span class="line">to set your account&#x27;s default identity.</span><br><span class="line">Omit --global to set the identity only in this repository.</span><br><span class="line"></span><br><span class="line">fatal: unable to auto-detect email address (got &#x27;Administrator@PC-20210304RNJZ.(none)&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>可以发现命令执行到git commit时候就出错了，给的提示信息也很明显，没有设置全局用户名，不知道以什么用户身份去提交代码，我们不要按照他的说明来，他是要设置全局用户，但我们电脑是要使用多个用户的，所以设置全局用户显然不合适，可以使用以下命令为当前项目设置用户及邮箱</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config user.name &quot;lorenwe2&quot;</span><br><span class="line">git config user.email &quot;lorenwe2@163.com&quot;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git config user.name <span class="string">&quot;lorenwe2&quot;</span></span></span><br><span class="line"></span><br><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git config user.email <span class="string">&quot;lorenwe2@163.com&quot;</span></span></span><br><span class="line"></span><br><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git commit -m <span class="string">&quot;添加文件&quot;</span></span></span><br><span class="line">[master (root-commit) 7bf22a5] 添加文件</span><br><span class="line"> 1 file changed, 0 insertions(+), 0 deletions(-)</span><br><span class="line"> create mode 100644 test.txt</span><br><span class="line"></span><br><span class="line">Administrator@PC-20210304RNJZ MINGW64 ~/Desktop/test/lorenwe2 (master)</span><br><span class="line"><span class="meta">$</span><span class="bash"> git push</span></span><br><span class="line">Enumerating objects: 3, done.</span><br><span class="line">Counting objects: 100% (3/3), done.</span><br><span class="line">Writing objects: 100% (3/3), 214 bytes | 214.00 KiB/s, done.</span><br><span class="line">Total 3 (delta 0), reused 0 (delta 0)</span><br><span class="line">To lorenwe2.github.com:lorenwe2/lorenwe2.git</span><br><span class="line"> * [new branch]      master -&gt; master</span><br></pre></td></tr></table></figure>
+
+<p>从上面可以看出，推送一切也都是ok的，假如不是新的仓库，而且原先还是使用HTTPS通信，则可以修改远程仓库地址</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote rm origin</span><br><span class="line">git remote add origin git@lorenwe2.github.com:xxx/xxxxx.git</span><br></pre></td></tr></table></figure>
+
+<p>再为这个仓库配置用户名和邮箱，就也能对旧仓库修改推送方式，如不知道旧仓库是如何配置的，可以打开仓库目录里的.git文件夹找到config文件查看即可，如图：</p>
+<img src="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/lorenwe2_config.png" class="" title="[git config]">
+
+<p>打开后可看到如下类似内容</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[core]</span></span><br><span class="line">	<span class="attr">repositoryformatversion</span> = <span class="number">0</span></span><br><span class="line">	<span class="attr">filemode</span> = <span class="literal">false</span></span><br><span class="line">	<span class="attr">bare</span> = <span class="literal">false</span></span><br><span class="line">	<span class="attr">logallrefupdates</span> = <span class="literal">true</span></span><br><span class="line">	<span class="attr">symlinks</span> = <span class="literal">false</span></span><br><span class="line">	<span class="attr">ignorecase</span> = <span class="literal">true</span></span><br><span class="line"><span class="section">[remote &quot;origin&quot;]</span></span><br><span class="line">	<span class="attr">url</span> = git@lorenwe2.github.com:lorenwe2/lorenwe2.git</span><br><span class="line">	<span class="attr">fetch</span> = +refs/heads/*:refs/remotes/origin/*</span><br><span class="line"><span class="section">[branch &quot;master&quot;]</span></span><br><span class="line">	<span class="attr">remote</span> = origin</span><br><span class="line">	<span class="attr">merge</span> = refs/heads/master</span><br><span class="line"><span class="section">[user]</span></span><br><span class="line">	<span class="attr">name</span> = lorenwe2</span><br><span class="line">	<span class="attr">email</span> = lorenwe2@<span class="number">163</span>.com</span><br></pre></td></tr></table></figure>
+
+<p>至此 win10 配置多个git账户算是完成啦</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/">
+    <time datetime="2021-12-31T03:53:48.000Z" class="entry-date">
+        2021-12-31
+    </time>
+</a>
+    
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
     <article id="post-Dockerfile编写规则" class="post-Dockerfile编写规则 post type-post status-publish format-standard hentry">
     <!---->
 
@@ -416,6 +545,10 @@
       <ul>
         
           <li>
+            <a href="/2021/12/31/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAGithub%E8%B4%A6%E5%8F%B7/">win10配置多个Github账号</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/16/Dockerfile%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99/">Dockerfile编写规则</a>
           </li>
         
@@ -429,10 +562,6 @@
         
           <li>
             <a href="/2017/11/14/composer%E7%AC%94%E8%AE%B0/">composer 笔记</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/12/PHP%E8%B0%83%E8%AF%95%E5%BF%85%E7%BB%8F%E4%B9%8B%E8%B7%AFxdebug/">PHP调试必经之路xdebug</a>
           </li>
         
       </ul>
