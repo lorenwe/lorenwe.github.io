@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://lorenwe.eu.org/sitemap.xml
