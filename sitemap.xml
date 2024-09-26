@@ -23,28 +23,13 @@
     <loc>https://lorenwe.eu.org/posts/tech/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAgithub%E8%B4%A6%E5%8F%B7/</loc>
     <lastmod>2024-09-25T14:11:40+08:00</lastmod>
   </url><url>
-    <loc>https://lorenwe.eu.org/categories/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://lorenwe.eu.org/tags/redis/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://lorenwe.eu.org/categories/redis/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://lorenwe.eu.org/posts/tech/tech1/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://lorenwe.eu.org/tags/tech/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://lorenwe.eu.org/tags/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
     <loc>https://lorenwe.eu.org/tags/blog/</loc>
     <lastmod>2022-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/posts/blog/blog/</loc>
+    <lastmod>2022-05-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://lorenwe.eu.org/tags/</loc>
     <lastmod>2022-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/posts/blog/</loc>
@@ -68,9 +53,6 @@
     <loc>https://lorenwe.eu.org/posts/read/read/</loc>
     <lastmod>2022-05-05T00:18:06+08:00</lastmod>
   </url><url>
-    <loc>https://lorenwe.eu.org/posts/tech/tech/</loc>
-    <lastmod>2022-05-05T00:17:58+08:00</lastmod>
-  </url><url>
     <loc>https://lorenwe.eu.org/links/</loc>
     <lastmod>2021-11-06T15:15:53+08:00</lastmod>
   </url><url>
@@ -80,6 +62,8 @@
     <loc>https://lorenwe.eu.org/archives/</loc>
   </url><url>
     <loc>https://lorenwe.eu.org/search/</loc>
+  </url><url>
+    <loc>https://lorenwe.eu.org/categories/</loc>
   </url><url>
     <loc>https://lorenwe.eu.org/series/</loc>
   </url>

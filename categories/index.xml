@@ -5,16 +5,6 @@
     <link>https://lorenwe.eu.org/categories/</link>
     <description>Recent content in Categories on Lorenwe Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language>
-    <lastBuildDate>Wed, 30 Nov 2022 15:55:23 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/categories/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Redis</title>
-      <link>https://lorenwe.eu.org/categories/redis/</link>
-      <pubDate>Wed, 30 Nov 2022 15:55:23 +0800</pubDate>
-      
-      <guid>https://lorenwe.eu.org/categories/redis/</guid>
-      <description></description>
-    </item>
-    
+    <language>zh</language><atom:link href="https://lorenwe.eu.org/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

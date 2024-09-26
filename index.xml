@@ -52,15 +52,6 @@
     </item>
     
     <item>
-      <title>Redis scan命令学习</title>
-      <link>https://lorenwe.eu.org/posts/tech/tech1/</link>
-      <pubDate>Wed, 30 Nov 2022 15:55:23 +0800</pubDate>
-      
-      <guid>https://lorenwe.eu.org/posts/tech/tech1/</guid>
-      <description>scan命令详解</description>
-    </item>
-    
-    <item>
       <title>Blog</title>
       <link>https://lorenwe.eu.org/posts/blog/blog/</link>
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
@@ -85,15 +76,6 @@
       
       <guid>https://lorenwe.eu.org/posts/read/read/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Tech</title>
-      <link>https://lorenwe.eu.org/posts/tech/tech/</link>
-      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
-      
-      <guid>https://lorenwe.eu.org/posts/tech/tech/</guid>
-      <description>科技代码</description>
     </item>
     
     <item>
