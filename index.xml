@@ -6,7 +6,16 @@
     <description>Recent content on Lorenwe Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Thu, 26 Sep 2024 14:08:16 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Sep 2024 16:54:24 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>New_life</title>
+      <link>https://lorenwe.eu.org/posts/life/new_life/</link>
+      <pubDate>Thu, 26 Sep 2024 16:54:24 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/life/new_life/</guid>
+      <description>&lt;p&gt;New_life&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>使用 GitHub Actions 自动部署 Hugo 站点</title>
       <link>https://lorenwe.eu.org/posts/tech/%E4%BD%BF%E7%94%A8githubactions%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2hugo%E7%AB%99%E7%82%B9/</link>

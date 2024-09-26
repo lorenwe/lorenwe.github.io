@@ -2,13 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://lorenwe.eu.org/posts/tech/</loc>
-    <lastmod>2024-09-26T14:08:16+08:00</lastmod>
-  </url><url>
     <loc>https://lorenwe.eu.org/posts/</loc>
-    <lastmod>2024-09-26T14:08:16+08:00</lastmod>
+    <lastmod>2024-09-26T16:54:24+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/</loc>
+    <lastmod>2024-09-26T16:54:24+08:00</lastmod>
+  </url><url>
+    <loc>https://lorenwe.eu.org/posts/life/new_life/</loc>
+    <lastmod>2024-09-26T16:54:24+08:00</lastmod>
+  </url><url>
+    <loc>https://lorenwe.eu.org/posts/life/</loc>
+    <lastmod>2024-09-26T16:54:24+08:00</lastmod>
+  </url><url>
+    <loc>https://lorenwe.eu.org/posts/tech/</loc>
     <lastmod>2024-09-26T14:08:16+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/posts/tech/%E4%BD%BF%E7%94%A8githubactions%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2hugo%E7%AB%99%E7%82%B9/</loc>
@@ -41,8 +47,6 @@
     <loc>https://lorenwe.eu.org/categories/</loc>
   </url><url>
     <loc>https://lorenwe.eu.org/series/</loc>
-  </url><url>
-    <loc>https://lorenwe.eu.org/posts/life/</loc>
   </url><url>
     <loc>https://lorenwe.eu.org/tags/</loc>
   </url><url>
