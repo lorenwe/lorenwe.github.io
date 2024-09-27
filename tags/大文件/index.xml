@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>大文件 on Lorenwe Blog</title>
+    <link>https://lorenwe.eu.org/tags/%E5%A4%A7%E6%96%87%E4%BB%B6/</link>
+    <description>Recent content in 大文件 on Lorenwe Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 25 Sep 2024 16:20:33 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/tags/%E5%A4%A7%E6%96%87%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何用PHP读取大文件</title>
+      <link>https://lorenwe.eu.org/posts/tech/%E5%A6%82%E4%BD%95%E7%94%A8php%E8%AF%BB%E5%8F%96%E5%A4%A7%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Wed, 25 Sep 2024 16:20:33 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/%E5%A6%82%E4%BD%95%E7%94%A8php%E8%AF%BB%E5%8F%96%E5%A4%A7%E6%96%87%E4%BB%B6/</guid>
+      <description>&lt;p&gt;在 &lt;a href=&#34;https://github.com/sitepoint-editors/sitepoint-performant-reading-of-big-files-in-php&#34;&gt;GitHub&lt;/a&gt; 上可以找到本教程的源码。&lt;/p&gt;
+&lt;h3 id=&#34;衡量成功的标准&#34;&gt;衡量成功的标准&lt;/h3&gt;
+&lt;p&gt;确保我们对代码有改进的唯一方法是测试一个不好的情况，然后将我们修复之后的测量与另一个进行比较。换句话说，除非我们知道“解决方案”对我们有多大的帮助（如果有的话），否则我们不知道它是否真的是一个解决方案。&lt;/p&gt;
+&lt;p&gt;这里有两个我们可以关系的衡量标准。首先是CPU使用率。我们要处理的进程有多快或多慢？第二是内存使用情况。脚本执行时需要多少内存？这两个通常是成反比的 - 这意味着我们可以以CPU使用率为代价来降低内存使用，反之亦然。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

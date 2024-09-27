@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>PHP on Lorenwe Blog</title>
+    <link>https://lorenwe.eu.org/categories/php/</link>
+    <description>Recent content in PHP on Lorenwe Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 25 Sep 2024 14:47:27 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/categories/php/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PHP构造multipart/form-data格式POST请求体的方法</title>
+      <link>https://lorenwe.eu.org/posts/tech/php%E6%9E%84%E9%80%A0form-data%E6%A0%BC%E5%BC%8Fpost%E8%AF%B7%E6%B1%82%E4%BD%93%E7%9A%84%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Wed, 25 Sep 2024 14:47:27 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/php%E6%9E%84%E9%80%A0form-data%E6%A0%BC%E5%BC%8Fpost%E8%AF%B7%E6%B1%82%E4%BD%93%E7%9A%84%E6%96%B9%E6%B3%95/</guid>
+      <description>&lt;h3 id=&#34;引言&#34;&gt;引言&lt;/h3&gt;
+&lt;p&gt;最近在尝试基于 PHP 做一个反向代理 HTTP 的程序，其中一个需求是将程序收到的HTTP请求还原回 &lt;a href=&#34;https://www.ietf.org/rfc/rfc2616.txt&#34;&gt;RFC2616&lt;/a&gt; 的原始格式。&lt;/p&gt;
+&lt;p&gt;在处理的过程中遇到的问题主要在请求体的处理上。利用PHP的封装协议机制，我们可以通过读取 &lt;a href=&#34;https://www.php.net/manual/zh/wrappers.php.php&#34;&gt;php://input&lt;/a&gt; 访问原始的POST信息。但这种方式有一个局限，对于 multipart/form-data 的请求来说，为了支持文件上传的操作，PHP会预先把请求体中的文件暂存到临时文件夹，并把参数解析到变量 $_POST 和 $_FILES 中， php://input 获取原始请求的功能也随之失效。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

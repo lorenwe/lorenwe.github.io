@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Git on Lorenwe Blog</title>
+    <link>https://lorenwe.eu.org/tags/git/</link>
+    <description>Recent content in Git on Lorenwe Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 25 Sep 2024 14:11:40 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Win10配置多个Github账号</title>
+      <link>https://lorenwe.eu.org/posts/tech/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAgithub%E8%B4%A6%E5%8F%B7/</link>
+      <pubDate>Wed, 25 Sep 2024 14:11:40 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/win10%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AAgithub%E8%B4%A6%E5%8F%B7/</guid>
+      <description>&lt;h3 id=&#34;一为什么要配置多个git账号&#34;&gt;一、为什么要配置多个Git账号&lt;/h3&gt;
+&lt;p&gt;文章写于2021年的最后一天，最近闲来无事，想搞个导航网站，至于为什么要自己搞，纯属兴趣，既然是兴趣，就想着不要投入太大，整个省心省力的方案，github pages走起，问题就来了，一个github账号只能CANAME一个域名，我刚好挂了一个博客，其他的仓库要pages就只能在我的博客域名后面跟上仓库名这样访问，这很不程序员，所以我就又注册了一个github账号，现在在我的win10电脑上就要使用两个github账户了，当我在我的电脑上给新注册的仓库推送代码时就会出现当前用户没有权限访问，至此，就只能想办法配置好多个用户访问了，其实实际工作中也会遇见这个问题，比如自己肯定有github账户，开发公司项目的时候可能会有公司的gitlab账户或者其他代码仓库的账户，如果是使用http方式拉取代码还好，账户密码一输，记住密码也就没有后续问题了，但如果是使用ssh拉取代码就懵逼了，今天就是来解决这个问题的&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

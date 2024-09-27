@@ -5,6 +5,43 @@
     <link>https://lorenwe.eu.org/categories/</link>
     <description>Recent content in Categories on Lorenwe Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh</language><atom:link href="https://lorenwe.eu.org/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>zh</language>
+    <lastBuildDate>Thu, 26 Sep 2024 14:08:16 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo</title>
+      <link>https://lorenwe.eu.org/categories/hugo/</link>
+      <pubDate>Thu, 26 Sep 2024 14:08:16 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/categories/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>POST</title>
+      <link>https://lorenwe.eu.org/categories/post/</link>
+      <pubDate>Wed, 25 Sep 2024 15:39:27 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/categories/post/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PHP</title>
+      <link>https://lorenwe.eu.org/categories/php/</link>
+      <pubDate>Wed, 25 Sep 2024 14:47:27 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/categories/php/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Git</title>
+      <link>https://lorenwe.eu.org/categories/git/</link>
+      <pubDate>Wed, 25 Sep 2024 14:11:40 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/categories/git/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>POST on Lorenwe Blog</title>
+    <link>https://lorenwe.eu.org/categories/post/</link>
+    <description>Recent content in POST on Lorenwe Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 25 Sep 2024 15:39:27 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/categories/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>四种常见的POST提交数据方式</title>
+      <link>https://lorenwe.eu.org/posts/tech/%E5%9B%9B%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84post%E6%8F%90%E4%BA%A4%E6%95%B0%E6%8D%AE%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Wed, 25 Sep 2024 15:39:27 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/%E5%9B%9B%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84post%E6%8F%90%E4%BA%A4%E6%95%B0%E6%8D%AE%E6%96%B9%E5%BC%8F/</guid>
+      <description>&lt;h3 id=&#34;前言&#34;&gt;前言&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.ietf.org/rfc/rfc2616.txt&#34;&gt;HTTP/1.1&lt;/a&gt; 协议规定的 HTTP 请求方法有 OPTIONS、GET、HEAD、POST、PUT、DELETE、TRACE、CONNECT 这几种。其中 POST 一般用来向服务端提交数据，本文主要讨论 POST 提交数据的几种方式。&lt;/p&gt;
+&lt;p&gt;我们知道，HTTP 协议是以 ASCII 码传输，建立在 TCP/IP 协议之上的应用层规范。规范把 HTTP 请求分为三个部分：状态行请求行、请求头、消息主体。类似于下面这样：&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
