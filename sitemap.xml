@@ -2,20 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://lorenwe.eu.org/posts/tech/</loc>
+    <lastmod>2024-10-10T16:28:40+08:00</lastmod>
+  </url><url>
     <loc>https://lorenwe.eu.org/posts/</loc>
-    <lastmod>2024-09-26T16:54:24+08:00</lastmod>
+    <lastmod>2024-10-10T16:28:40+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/</loc>
-    <lastmod>2024-09-26T16:54:24+08:00</lastmod>
+    <lastmod>2024-10-10T16:28:40+08:00</lastmod>
+  </url><url>
+    <loc>https://lorenwe.eu.org/posts/tech/%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85dockerdesktop%E5%90%8E%E8%BF%81%E7%A7%BB%E9%95%9C%E5%83%8F%E4%BD%8D%E7%BD%AE/</loc>
+    <lastmod>2024-10-10T16:28:40+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/posts/life/new_life/</loc>
     <lastmod>2024-09-26T16:54:24+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/posts/life/</loc>
     <lastmod>2024-09-26T16:54:24+08:00</lastmod>
-  </url><url>
-    <loc>https://lorenwe.eu.org/posts/tech/</loc>
-    <lastmod>2024-09-26T14:08:16+08:00</lastmod>
   </url><url>
     <loc>https://lorenwe.eu.org/categories/</loc>
     <lastmod>2024-09-26T14:08:16+08:00</lastmod>

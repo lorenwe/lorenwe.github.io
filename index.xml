@@ -6,7 +6,20 @@
     <description>Recent content on Lorenwe Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Thu, 26 Sep 2024 16:54:24 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Oct 2024 16:28:40 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在windows系统下安装DockerDesktop后迁移镜像位置</title>
+      <link>https://lorenwe.eu.org/posts/tech/%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85dockerdesktop%E5%90%8E%E8%BF%81%E7%A7%BB%E9%95%9C%E5%83%8F%E4%BD%8D%E7%BD%AE/</link>
+      <pubDate>Thu, 10 Oct 2024 16:28:40 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85dockerdesktop%E5%90%8E%E8%BF%81%E7%A7%BB%E9%95%9C%E5%83%8F%E4%BD%8D%E7%BD%AE/</guid>
+      <description>&lt;p&gt;由于现在 docker Desktop 默认使用 WSL 2 来运行，而不是以前的 Hyper-V。
+所以 在win10上安装 docker Desktop时没有存储路径选择，而是直接默认安装到了系统 C盘，这样后续使用一些镜像后，日积月累C盘空间会越来越小。&lt;/p&gt;
+&lt;p&gt;镜像文件位置是在C盘下的用户名下的\AppData\Local\Docker\wsl
+例如我的保存位置是：
+&lt;code&gt; C:\Users\Admin\AppData\Local\Docker\wsl&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>New_life</title>
       <link>https://lorenwe.eu.org/posts/life/new_life/</link>
