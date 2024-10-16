@@ -1,0 +1,720 @@
+<!doctype html><html lang=zh dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Rust 中的 Sized | Lorenwe Blog</title>
+<meta name=keywords content><meta name=description content="原文： Sizedness in Rust
+概述
+Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 &ldquo;x doesn&rsquo;t have size known at compile time&rdquo; 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。"><meta name=author content="Lorenwe"><link rel=canonical href=https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/><link crossorigin=anonymous href=/assets/css/stylesheet.css rel="preload stylesheet" as=style><script defer crossorigin=anonymous src=/assets/js/highlight.js onload=hljs.initHighlightingOnLoad()></script><link rel=icon href=https://lorenwe.eu.org/img/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://lorenwe.eu.org/img/favicon.ico><link rel=icon type=image/png sizes=32x32 href=https://lorenwe.eu.org/img/favicon.ico><link rel=apple-touch-icon href=https://lorenwe.eu.org/img/favicon.ico><link rel=mask-icon href=https://lorenwe.eu.org/img/favicon.ico><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=zh href=https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><script defer src=https://unpkg.com/mermaid@8.8.1/dist/mermaid.min.js></script><link rel=stylesheet href=https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.min.css><script src=//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js></script><script src=https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js></script><meta property="og:title" content="Rust 中的 Sized"><meta property="og:description" content="原文： Sizedness in Rust
+概述
+Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 &ldquo;x doesn&rsquo;t have size known at compile time&rdquo; 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。"><meta property="og:type" content="article"><meta property="og:url" content="https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-10-16T09:55:37+08:00"><meta property="article:modified_time" content="2024-10-16T09:55:37+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Rust 中的 Sized"><meta name=twitter:description content="原文： Sizedness in Rust
+概述
+Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 &ldquo;x doesn&rsquo;t have size known at compile time&rdquo; 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"📚文章","item":"https://lorenwe.eu.org/posts/"},{"@type":"ListItem","position":2,"name":"👨🏻‍💻 技术","item":"https://lorenwe.eu.org/posts/tech/"},{"@type":"ListItem","position":3,"name":"Rust 中的 Sized","item":"https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Rust 中的 Sized","name":"Rust 中的 Sized","description":"原文： Sizedness in Rust\n概述 Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 \u0026ldquo;x doesn\u0026rsquo;t have size known at compile time\u0026rdquo; 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。\n","keywords":[""],"articleBody":"原文： Sizedness in Rust\n概述 Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 “x doesn’t have size known at compile time” 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。\n[注：本文的“宽度”通常指指针宽度，也就是机器字长。在 32 位系统中，1 个宽度的大小是 32 位，也就是 4 个字节；在 64 位系统中则是 8 个字节。2 个宽度也叫“胖指针”或“宽指针”。]\nSized 在 Rust 中，如果一个类型的字节大小可以在编译期确定，那么它就是 固定大小类型（sized type）。确定某类型的大小非常重要，只有这样才能在栈上为该类型的实例分配足够的空间。固定大小类型可以通过值或引用进行传递。如果一个类型的大小无法在编译期确定，那么它被称为 未定大小类型（unsized type） 或 动态大小类型（DST, Dynamically-Sized Type）。由于未定大小类型无法放置在栈上，因此它们只能通过引用进行传递。以下是一些固定大小和未定大小类型的示例：\nuse std::mem::size_of; fn main() { // 原生类型 assert_eq!(4, size_of::()); assert_eq!(8, size_of::()); // 元组 assert_eq!(8, size_of::\u003c(i32, i32)\u003e()); // 数组 assert_eq!(0, size_of::\u003c[i32; 0]\u003e()); assert_eq!(12, size_of::\u003c[i32; 3]\u003e()); struct Point { x: i32, y: i32, } // 结构体 assert_eq!(8, size_of::()); // 枚举 assert_eq!(8, size_of::","wordCount":"10417","inLanguage":"zh","datePublished":"2024-10-16T09:55:37+08:00","dateModified":"2024-10-16T09:55:37+08:00","author":[{"@type":"Person","name":"Lorenwe"}],"mainEntityOfPage":{"@type":"WebPage","@id":"https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/"},"publisher":{"@type":"Organization","name":"Lorenwe Blog","logo":{"@type":"ImageObject","url":"https://lorenwe.eu.org/img/favicon.ico"}}}</script></head><body id=top><script>(function(){let e,t=new RegExp("(^| )change-themes=([^;]*)(;|$)");(e=document.cookie.match(t))||((new Date).getHours()>=19||(new Date).getHours()<6?(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark")):(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")))})(),localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://lorenwe.eu.org/ accesskey=h title="Lorenwe Blog (Alt + H)"><img src=https://lorenwe.eu.org/img/kaola.png alt=logo aria-label=logo height=35>Lorenwe Blog</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button><ul class=lang-switch><li>|</li></ul></div></div><ul id=menu><li><a href=https://lorenwe.eu.org/search title="🔍 搜索 (Alt + /)" accesskey=/><span>🔍 搜索</span></a></li><li><a href=https://lorenwe.eu.org/ title="🏠 主页"><span>🏠 主页</span></a></li><li><a href=https://lorenwe.eu.org/posts title="📚 文章"><span>📚 文章</span></a></li><li><a href=https://lorenwe.eu.org/tags title="🧩 标签"><span>🧩 标签</span></a></li><li><a href=https://lorenwe.eu.org/archives/ title="⏱️ 时间轴"><span>⏱️ 时间轴</span></a></li><li><a href=https://lorenwe.eu.org/about title="🙋🏻‍♂️ 关于"><span>🙋🏻‍♂️ 关于</span></a></li><li><a href=https://lorenwe.eu.org/links title="🤝 友链"><span>🤝 友链</span></a></li></ul></nav></header><main class="main page"><style>i[id*=post_meta_style]{display:flex;align-items:center;margin:0 0 10px}</style><article class=post-single><div id=single-content><header class=post-header><div class=breadcrumbs><a href=https://lorenwe.eu.org/>🏠 主页</a>&nbsp;»&nbsp;<a href=https://lorenwe.eu.org/posts/>📚文章</a>&nbsp;»&nbsp;<a href=https://lorenwe.eu.org/posts/tech/>👨🏻‍💻 技术</a></div><h1 class=post-title>Rust 中的 Sized</h1><div class=post-meta><style>i[id*=post_meta_style]{display:flex;align-items:center;margin:0 0 10px}.parent-post-meta{display:flex;flex-wrap:wrap;opacity:.8}</style><span class=parent-post-meta><span id=post_meta_style_1><span class="fa fa-calendar-check-o"></span>
+<span>2024-10-16
+&nbsp;&nbsp;
+</span></span><span id=post_meta_style_3><span class="fa fa-file-word-o"></span>
+<span>10417字
+&nbsp;&nbsp;
+</span></span><span id=post_meta_style_4><span class="fa fa-clock-o"></span>
+<span>21分钟
+&nbsp;&nbsp;
+</span></span><span id=post_meta_style_5><span class="fa fa-user-o"></span>
+<span>Lorenwe
+&nbsp;&nbsp;
+</span></span><span id=post_meta_style_6><span class="fa fa-tags" style=opacity:.8></span>
+<span><span class=post-tags-meta></span></span></span></span></div></header><aside id=toc-container class="toc-container wide"><div class=toc><details open><summary accesskey=c title="(Alt + C)"><span class=details>目录</span></summary><div class=inner><ul><li><a href=#%e6%a6%82%e8%bf%b0 aria-label=概述>概述</a></li><li><a href=#sized aria-label=Sized>Sized</a></li><li><a href=#sized-trait aria-label="Sized Trait">Sized Trait</a></li><li><a href=#%e6%b3%9b%e5%9e%8b%e4%b8%ad%e7%9a%84-sized aria-label="泛型中的 Sized">泛型中的 Sized</a></li><li><a href=#%e6%9c%aa%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%b1%bb%e5%9e%8b aria-label=未定大小类型>未定大小类型</a><ul><li><a href=#%e5%88%87%e7%89%87 aria-label=切片>切片</a></li><li><a href=#trait-%e5%af%b9%e8%b1%a1 aria-label="Trait 对象">Trait 对象</a></li><li><a href=#trait-%e5%af%b9%e8%b1%a1%e7%9a%84%e9%99%90%e5%88%b6 aria-label="Trait 对象的限制">Trait 对象的限制</a></li><li><a href=#%e7%94%a8%e6%88%b7%e8%87%aa%e5%ae%9a%e4%b9%89%e7%9a%84%e6%9c%aa%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%b1%bb%e5%9e%8b aria-label=用户自定义的未定大小类型>用户自定义的未定大小类型</a></li></ul></li><li><a href=#%e9%9b%b6%e5%a4%a7%e5%b0%8f%e7%b1%bb%e5%9e%8b aria-label=零大小类型>零大小类型</a><ul><li><a href=#%e5%8d%95%e5%85%83%e7%b1%bb%e5%9e%8bunit-type aria-label="单元类型（unit type）">单元类型（unit type）</a></li><li><a href=#%e5%8d%95%e5%85%83%e7%bb%93%e6%9e%84%e4%bd%93unit-struct aria-label="单元结构体（unit struct）">单元结构体（unit struct）</a></li><li><a href=#never-%e7%b1%bb%e5%9e%8b aria-label="Never 类型">Never 类型</a></li><li><a href=#%e7%94%a8%e6%88%b7%e8%87%aa%e5%ae%9a%e4%b9%89%e7%9a%84%e4%bc%aa-never-%e7%b1%bb%e5%9e%8b aria-label="用户自定义的伪 Never 类型">用户自定义的伪 Never 类型</a></li><li><a href=#phantomdata aria-label=PhantomData>PhantomData</a></li></ul></li><li><a href=#%e7%bb%93%e8%ae%ba aria-label=结论>结论</a></li></ul></div></details></div></aside><script>let activeElement,elements;window.addEventListener("DOMContentLoaded",function(){checkTocPosition(),elements=document.querySelectorAll("h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]"),activeElement=elements[0];const t=encodeURI(activeElement.getAttribute("id")).toLowerCase();document.querySelector(`.inner ul li a[href="#${t}"]`).classList.add("active")},!1),window.addEventListener("resize",function(){checkTocPosition()},!1),window.addEventListener("scroll",()=>{elements&&(activeElement=Array.from(elements).find(e=>{if(getOffsetTop(e)-window.pageYOffset>0&&getOffsetTop(e)-window.pageYOffset<window.innerHeight/2)return e})||activeElement,elements.forEach(e=>{const t=encodeURI(e.getAttribute("id")).toLowerCase();e===activeElement?document.querySelector(`.inner ul li a[href="#${t}"]`).classList.add("active"):document.querySelector(`.inner ul li a[href="#${t}"]`).classList.remove("active")}))},!1);const main=parseInt(getComputedStyle(document.body).getPropertyValue("--article-width"),10),toc=parseInt(getComputedStyle(document.body).getPropertyValue("--toc-width"),10),gap=parseInt(getComputedStyle(document.body).getPropertyValue("--gap"),10);function checkTocPosition(){const e=document.body.scrollWidth;e-main-toc*2-gap*4>0?document.getElementById("toc-container").classList.add("wide"):document.getElementById("toc-container").classList.remove("wide")}function getOffsetTop(e){if(!e.getClientRects().length)return 0;let t=e.getBoundingClientRect(),n=e.ownerDocument.defaultView;return t.top+n.pageYOffset}</script><div class=post-content><p>原文： <a href=https://github.com/pretzelhammer/rust-blog/blob/master/posts/sizedness-in-rust.md>Sizedness in Rust</a></p><h3 id=概述>概述<a hidden class=anchor aria-hidden=true href=#概述>#</a></h3><p>Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 &ldquo;x doesn&rsquo;t have size known at compile time&rdquo; 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。</p><p>[注：本文的“宽度”通常指指针宽度，也就是机器字长。在 32 位系统中，1 个宽度的大小是 32 位，也就是 4 个字节；在 64 位系统中则是 8 个字节。2 个宽度也叫“胖指针”或“宽指针”。]</p><h3 id=sized>Sized<a hidden class=anchor aria-hidden=true href=#sized>#</a></h3><p>在 Rust 中，如果一个类型的字节大小可以在编译期确定，那么它就是 固定大小类型（sized type）。确定某类型的大小非常重要，只有这样才能在栈上为该类型的实例分配足够的空间。固定大小类型可以通过值或引用进行传递。如果一个类型的大小无法在编译期确定，那么它被称为 未定大小类型（unsized type） 或 动态大小类型（DST, Dynamically-Sized Type）。由于未定大小类型无法放置在栈上，因此它们只能通过引用进行传递。以下是一些固定大小和未定大小类型的示例：</p><pre><code class=language-rust>use std::mem::size_of;
+fn main() {
+    // 原生类型
+    assert_eq!(4, size_of::&lt;i32&gt;());
+    assert_eq!(8, size_of::&lt;f64&gt;());
+    // 元组
+    assert_eq!(8, size_of::&lt;(i32, i32)&gt;());
+    // 数组
+    assert_eq!(0, size_of::&lt;[i32; 0]&gt;());
+    assert_eq!(12, size_of::&lt;[i32; 3]&gt;());
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+    // 结构体
+    assert_eq!(8, size_of::&lt;Point&gt;());
+    // 枚举
+    assert_eq!(8, size_of::&lt;Option&lt;i32&gt;&gt;());
+    // 获取指针宽度(即机器字长)，
+    // 在 32 位系统上是 4 个字节
+    // 在 64 位系统上是 8 个字节
+    const WIDTH: usize = size_of::&lt;&amp;()&gt;();
+    // 指向固定大小类型的指针占用 1 个宽度
+    assert_eq!(WIDTH, size_of::&lt;&amp;i32&gt;());
+    assert_eq!(WIDTH, size_of::&lt;&amp;mut i32&gt;());
+    assert_eq!(WIDTH, size_of::&lt;Box&lt;i32&gt;&gt;());
+    assert_eq!(WIDTH, size_of::&lt;fn(i32) -&gt; i32&gt;());
+    const DOUBLE_WIDTH: usize = 2 * WIDTH;
+    // 未定大小的结构体
+    struct Unsized {
+        unsized_field: [i32],
+    }
+    // 指向未定大小类型的指针占用 2 个宽度
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;&amp;str&gt;()); // 切片
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;&amp;[i32]&gt;()); // 切片
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;&amp;dyn ToString&gt;()); // trait 对象
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;Box&lt;dyn ToString&gt;&gt;()); // trait 对象
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;&amp;Unsized&gt;()); // 自定义的未定大小类型
+    // 未定大小类型
+    size_of::&lt;str&gt;(); // 编译错误
+    size_of::&lt;[i32]&gt;(); // 编译错误
+    size_of::&lt;dyn ToString&gt;(); // 编译错误
+    size_of::&lt;Unsized&gt;(); // 编译错误
+}
+</code></pre><p>固定大小类型的大小显而易见：所有原生类型和指针都具有已知大小，而所有的结构体、元组、枚举和数组都是由原生类型、指针或其他嵌套的结构体、元组、枚举和数组组成的，因此可以递归地计算其字节总数，以及内存填充和对齐所需的额外字节。同样显而易见的是，未定大小类型的大小无法确定：切片可以包含任意数量的元素，因此它在运行期具有任意大小；而 trait 对象则可以由任意数量的结构体或枚举实现，因此在运行期也可以具有任意大小。</p><p>专业提示</p><ul><li>在 Rust 中，指向动态大小数组视图的指针被称为切片（slice）。例如，&amp;str 被称为 &ldquo;字符串切片&rdquo;，&[i32] 被称为 &ldquo;i32 切片&rdquo;</li><li>切片占用 2 个宽度，分别存储指向数组的指针和数组中元素的数量</li><li>trait 对象指针占用 2 个宽度，分别存储指向数据的指针和指向虚表（vtable）的指针</li><li>未定大小的结构体指针占用 2 个宽度，分别存储指向结构体数据的指针和结构体的大小</li><li>未定大小的结构体只能有一个未定大小的字段，并且它必须是结构体中最后一个字段</li></ul><p>为了强化“未定大小类型占用 2 个宽度”的观点，此处通过带注释的代码示例，将数组与切片进行了比较。</p><pre><code class=language-rust>use std::mem::size_of;
+
+const WIDTH: usize = size_of::&lt;&amp;()&gt;();
+const DOUBLE_WIDTH: usize = 2 * WIDTH;
+
+fn main() {
+    // 类型中存储的数据长度
+    // [i32; 3] 表示存放三个 i32 的数组
+    let nums: &amp;[i32; 3] = &amp;[1, 2, 3];
+
+    // 1 个指针宽度
+    assert_eq!(WIDTH, size_of::&lt;&amp;[i32; 3]&gt;());
+
+    let mut sum = 0;
+
+    // 可以安全地迭代 nums
+    // Rust 知道其确切有 3 个元素
+    for num in nums {
+        sum += num;
+    }
+
+    assert_eq!(6, sum);
+
+    // 未定大小强制转换，从 [i32; 3] 转为 [i32]
+    // 数据长度现在存储在指针中
+    let nums: &amp;[i32] = &amp;[1, 2, 3];
+    
+    // 需要 2 个指针宽度来同时存储数据长度
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;&amp;[i32]&gt;());
+
+    let mut sum = 0;
+
+    // 可以安全地迭代 nums
+    // Rust 知道其确切有 3 个元素
+    for num in nums {
+        sum += num;
+    }
+    assert_eq!(6, sum);
+}
+</code></pre><p>以下是另一个有注释的代码示例，比较了结构体和 trait 对象的区别：</p><pre><code class=language-rust>use std::mem::size_of;
+
+const WIDTH: usize = size_of::&lt;&amp;()&gt;();
+const DOUBLE_WIDTH: usize = 2 * WIDTH;
+
+trait Trait {
+    fn print(&amp;self);
+}
+
+struct Struct;
+struct Struct2;
+
+impl Trait for Struct {
+    fn print(&amp;self) {
+        println!(&quot;struct&quot;);
+    }
+}
+
+impl Trait for Struct2 {
+    fn print(&amp;self) {
+        println!(&quot;struct2&quot;);
+    }
+}
+
+fn print_struct(s: &amp;Struct) {
+    // 总是打印 &quot;struct&quot;，编译期即可知
+    s.print();
+    // 单宽度指针
+    assert_eq!(WIDTH, size_of::&lt;&amp;Struct&gt;());
+}
+
+fn print_struct2(s2: &amp;Struct2) {
+    // 总是打印 &quot;struct2&quot;，编译期即可知
+    s2.print();
+    // 单宽度指针
+    assert_eq!(WIDTH, size_of::&lt;&amp;Struct2&gt;());
+}
+
+fn print_trait(t: &amp;dyn Trait) {
+    // 打印 &quot;struct&quot; 还是 &quot;struct2&quot; ? 编译期不可知
+    t.print();
+    // Rust 需要在运行期检查指针以确定是使用
+    // Struct 还是 Struct2 的 &quot;print&quot; 实现，
+    // 所以指针必须是双宽度的
+    assert_eq!(DOUBLE_WIDTH, size_of::&lt;&amp;dyn Trait&gt;());
+}
+
+fn main() {
+    // 单宽度指针，指向数据
+    let s = &amp;Struct; 
+    print_struct(s); // 打印 &quot;struct&quot;
+    
+    // 单宽度指针，指向数据
+    let s2 = &amp;Struct2;
+    print_struct2(s2); // 打印 &quot;struct2&quot;
+    
+    // 未定大小强制转换，从 Struct 到 dyn Trait
+    // 双宽度指针，指向数据和 Struct 的虚表
+    let t: &amp;dyn Trait = &amp;Struct;
+    print_trait(t); // 打印 &quot;struct&quot;
+    
+    // 未定大小强制转换，从 Struct2 到 dyn Trait
+    // 双宽度指针，指向数据和 Struct2 的虚表
+    let t: &amp;dyn Trait = &amp;Struct2;
+    print_trait(t); // 打印 &quot;struct2&quot;
+}
+</code></pre><p>主要收获</p><ul><li>只有固定大小类型的实例可以放在栈上，也就是说，可以按值传递</li><li>未定大小类型的实例无法放在栈上，必须通过引用进行传递</li><li>指向未定大小类型的指针是双宽度的，因为除了指向数据之外，它们还有额外的信息要管理，用以跟踪数据的长度或者指向虚表</li></ul><h3 id=sized-trait>Sized Trait<a hidden class=anchor aria-hidden=true href=#sized-trait>#</a></h3><p>在 Rust 中，Sized trait 属于自动 trait，同时也是一个标记 trait。</p><p>自动 trait 是指在特定条件下自动为类型实现的 trait 。标记 trait 则用于表明类型具有某种特定属性，标记 trait 不包含任何 trait 项——像是方法、关联函数、关联常量或关联类型。所有自动 trait 都是标记 trait ，但不是所有标记 trait 都是自动 trait 。自动 trait 必须是标记 trait ，因为只有这样编译器才能为它们提供自动默认实现，如果某 trait 具有任何 trait 项，就无法再提供自动默认实现了。</p><p>如果一个类型的所有成员都是 Sized 类型，那么该类型将自动获得 Sized 实现。“成员”的具体含义取决于容器类型，例如：结构体的字段，枚举的变体，数组的元素，元组的项等等。一旦某类型被标记为具有 Sized 实现，意味着它的字节大小在编译期便已知。</p><p>其他自动标记 trait 的例子还有 Send 和 Sync。如果一个类型实现了 Send，则意味着该类型的值可以从一个线程传递到另一个线程。如果一个类型实现了 Sync，则意味着可以在多线程间使用共享引用共享其值。如果一个类型的所有成员都是 Send 和 Sync 类型，那么它将自动获得 Send 和 Sync 实现。Sized 有些特殊之处，与其他自动标记 trait 不同的是，它不可被取消。</p><pre><code class=language-rust>#![feature(negative_impls)]
+
+// 该类型是 Sized, Send 及 Sync
+struct Struct;
+
+// 取消 Send trait
+impl !Send for Struct {} // ✅
+
+// 取消 Sync trait
+impl !Sync for Struct {} // ✅
+
+// 不能取消 Sized
+impl !Sized for Struct {} // ❌
+</code></pre><p>这倒也合乎情理，毕竟我们可能出于一些原因不希望某类型被在线程之间传递或共享，然而很难想象出这种情景：希望编译器“忘记”某类型的大小，并将其视为一个未定大小的类型。这样做没有任何好处，只会使该类型变得更加难以处理。</p><p>此外，非常谨慎地说，Sized 在技术上其实并不是一个自动 trait，因为它并没有使用 auto 关键字进行定义，然而编译器对它的特殊处理方式使其行为非常类似于自动 trait，因此在实践中将其视为自动 trait 是可行的。</p><p>主要收获</p><ul><li>Sized 是 “自动” 标记 trait</li></ul><h3 id=泛型中的-sized>泛型中的 Sized<a hidden class=anchor aria-hidden=true href=#泛型中的-sized>#</a></h3><p>可能不易察觉：当编写泛型代码时，每个泛型类型参数默认都会自动绑定到 Sized trait 上。</p><pre><code class=language-rust>// 该泛型函数...
+fn func&lt;T&gt;(t: T) {}
+
+// ...去掉语法糖后...
+fn func&lt;T: Sized&gt;(t: T) {}
+
+// ...可以通过明确设置为 ?Sized 来取消它...
+fn func&lt;T: ?Sized&gt;(t: T) {} // ❌
+
+// ...然而这将无法编译，毕竟它没有已知的大小。
+// 因此我们必须将其放在指针后面...
+fn func&lt;T: ?Sized&gt;(t: &amp;T) {} // ✅
+fn func&lt;T: ?Sized&gt;(t: Box&lt;T&gt;) {} // ✅
+</code></pre><p>专业提示</p><ul><li>?Sized 可读作“可选大小的”或“可能具有大小的”，其被添加到类型参数的约束中，表示该类型既可以是固定大小，也可以是未定大小的</li><li>?Sized 通常被称为“放宽约束”或“宽松约束”，因为它放宽了对类型参数的限制</li><li>?Sized 是 Rust 中唯一的宽松约束</li></ul><p>这个知识点很重要，为什么？这样说吧，每当使用泛型类型并将其置于指针后面时，我们几乎总是希望取消掉默认的 Sized 约束，以使函数在接受参数类型时更加灵活。另一方面，如果不取消掉默认的 Sized 约束，最终将会得到些令人困惑的编译错误信息。</p><p>接下来参观一下我在 Rust 中编写的第一个泛型函数。我在 dbg! 宏稳定发布前便开始学习 Rust，那时打印调试值的唯一方法是每次都手动输入 println!("{:?}", some_value);，相当繁琐。因此，我决定编写这样一个 debug 辅助函数：</p><pre><code class=language-rust>use std::fmt::Debug;
+
+fn debug&lt;T: Debug&gt;(t: T) { // T: Debug + Sized
+    println!(&quot;{:?}&quot;, t);
+}
+
+fn main() {
+    debug(&quot;my str&quot;); // T = &amp;str, &amp;str: Debug + Sized ✅
+}
+</code></pre><p>目前为止一切顺利，但是该函数会获取任何传递给它的值的所有权，这有点让人闹心，所以我将函数改为只接受引用作为参数：</p><pre><code class=language-rust>use std::fmt::Debug;
+
+fn dbg&lt;T: Debug&gt;(t: &amp;T) { // T: Debug + Sized
+    println!(&quot;{:?}&quot;, t);
+}
+
+fn main() {
+    dbg(&quot;my str&quot;); // &amp;T = &amp;str, T = str, str: Debug + !Sized ❌
+}
+</code></pre><p>这下报错了：</p><pre><code class=language-rust>error[E0277]: the size for values of type `str` cannot be known at compilation time
+ --&gt; src/main.rs:8:9
+  |
+3 | fn dbg&lt;T: Debug&gt;(t: &amp;T) {
+  |        - required by this bound in `dbg`
+...
+8 |     dbg(&quot;my str&quot;);
+  |         ^^^^^^^^ doesn't have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `str`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait&gt;
+help: consider relaxing the implicit `Sized` restriction
+  |
+3 | fn dbg&lt;T: Debug + ?Sized&gt;(t: &amp;T) {
+  |   
+</code></pre><p>当我头一次看到这些错误信息时也是一脸懵逼。尽管函数接收的参数比之前更加严格了，但却出现了编译错误！到底发生了什么？</p><p>上面的代码注释中我已略微透露了答案，但总的来说：在编译过程中，Rust 解析 T 为具体类型时会执行模式匹配。下面的表格可以帮助厘清该问题：</p><table><thead><tr><th>类型</th><th><code>T</code></th><th><code>&amp;T</code></th></tr></thead><tbody><tr><td><code>&amp;str</code></td><td><code>T</code> = <code>&amp;str</code></td><td><code>T</code> = <code>str</code></td></tr></tbody></table><table><thead><tr><th>类型</th><th><code>Sized</code></th></tr></thead><tbody><tr><td><code>str</code></td><td>❌</td></tr><tr><td><code>&amp;str</code></td><td>✅</td></tr><tr><td><code>&&amp;str</code></td><td>✅</td></tr></tbody></table><p>这便是为什么在将函数改为接收引用后，我不得不添加 ?Sized 约束以使函数按预期工作。下面是可以正常工作的函数：</p><pre><code class=language-rust>use std::fmt::Debug;
+
+fn debug&lt;T: Debug + ?Sized&gt;(t: &amp;T) { // T: Debug + ?Sized
+    println!(&quot;{:?}&quot;, t);
+}
+
+fn main() {
+    debug(&quot;my str&quot;); // &amp;T = &amp;str, T = str, str: Debug + !Sized ✅
+}
+</code></pre><p>主要收获</p><ul><li>所有的泛型类型参数默认情况下都会自动绑定为 Sized。</li><li>若有泛型函数，它接收一个指针后面的参数 T，诸如 &amp;T、Box<t>、Rc<t> 等等，此时几乎总是希望使用 T: ?Sized 取消掉默认的 Sized 约束</li></ul><h3 id=未定大小类型>未定大小类型<a hidden class=anchor aria-hidden=true href=#未定大小类型>#</a></h3><h4 id=切片>切片<a hidden class=anchor aria-hidden=true href=#切片>#</a></h4><p>最常见的切片类型是字符串切片 &amp;str 和数组切片 &[T]。切片之好处在于许多其他类型可以自动转换为切片，利用切片和 Rust 的自动类型转换机制，我们可以编写出灵活的 API。</p><p>强制类型转换可以发生在很多场景，但最显著的是在函数参数中以及方法调用时。值得关注的类型转换有两种，即 解引用强转（Deref Coercion） 和 未定大小类型强转（Unsized Coercion）。解引用强转是指使用解引用操作将 T 强制转换为 U，即 <code>T: Deref&lt;Target = U></code>，例如 <code>String.deref() -> str</code>。未定大小类型强转是指将 T 强制转换为 U，其中 T 是一个固定大小的类型，而 U 是一个未定大小的类型，即 <code>T: Unsize&lt;U></code>，例如 <code>[i32; 3] -> [i32]</code>。</p><pre><code class=language-rust>trait Trait {
+    fn method(&amp;self) {}
+}
+
+impl Trait for str {
+    // 现在可以使用以下类型调用 &quot;method&quot; 方法
+    // 1) str 或
+    // 2) String， 因为 String: Deref&lt;Target = str&gt;
+}
+impl&lt;T&gt; Trait for [T] {
+    // 现在可以使用以下类型调用 &quot;method&quot; 方法
+    // 1) 任意 &amp;[T]
+    // 2) 任意 U 且 U: Deref&lt;Target = [T]&gt;， 比如 Vec&lt;T&gt;
+    // 3) [T; N] ，N 为任意值, 因为 [T; N]: Unsize&lt;[T]&gt;
+}
+
+fn str_fun(s: &amp;str) {}
+fn slice_fun&lt;T&gt;(s: &amp;[T]) {}
+
+fn main() {
+    let str_slice: &amp;str = &quot;str slice&quot;;
+    let string: String = &quot;string&quot;.to_owned();
+
+    // 函数参数
+    str_fun(str_slice);
+    str_fun(&amp;string); // 解引用强转
+
+    // 方法调用
+    str_slice.method();
+    string.method(); // 解引用强转
+
+    let slice: &amp;[i32] = &amp;[1];
+    let three_array: [i32; 3] = [1, 2, 3];
+    let five_array: [i32; 5] = [1, 2, 3, 4, 5];
+    let vec: Vec&lt;i32&gt; = vec![1];
+
+    // 函数参数
+    slice_fun(slice);
+    slice_fun(&amp;vec); // 解引用强转
+    slice_fun(&amp;three_array); // 未定大小类型强转
+    slice_fun(&amp;five_array); // 未定大小类型强转
+
+    // 方法调用
+    slice.method();
+    vec.method(); // 解引用强转
+    three_array.method(); // 未定大小类型强转
+    five_array.method(); // 未定大小类型强转
+}
+</code></pre><p>主要收获</p><ul><li>利用切片和 Rust 的自动类型转换可以编写灵活的 API</li></ul><h4 id=trait-对象>Trait 对象<a hidden class=anchor aria-hidden=true href=#trait-对象>#</a></h4><p>默认情况下，trait 是 ?Sized 的。代码：</p><pre><code class=language-rust>trait Trait: ?Sized {}
+</code></pre><p>将会抛出：</p><pre><code class=language-cmd>error: `?Trait` is not permitted in supertraits
+ --&gt; src/main.rs:1:14
+  |
+1 | trait Trait: ?Sized {}
+  |              ^^^^^^
+  |
+  = note: traits are `?Sized` by default
+</code></pre><p>我们很快就会讨论为什么 trait 默认是 ?Sized 的，但首先需要思考一下 trait 是 ?Sized 的意义何在？将上面的示例展开：</p><pre><code class=language-rust>trait Trait where Self: ?Sized {}
+</code></pre><p>默认情况下，trait 允许 self 可能为一个未定大小类型。之前讲过，不能通过值传递未定大小类型，因而限制了 trait 中可定义的方法的类型。理论上讲，不可能编写一个以值传递 self 或返回 self 的方法，但令人惊讶的是，以下代码竟然可以编译通过：</p><pre><code class=language-rust>trait Trait {
+    fn method(self); // ✅
+}
+</code></pre><p>然而一旦开始尝试实现该方法，无论是通过提供默认实现，还是通过为未定大小类型实现该 trait，都将导致编译错误：</p><pre><code class=language-rust>trait Trait {
+    fn method(self) {} // ❌
+}
+
+impl Trait for str {
+    fn method(self) {} // ❌
+}
+</code></pre><p>抛出：</p><pre><code class=language-rust>error[E0277]: the size for values of type `Self` cannot be known at compilation time
+ --&gt; src/lib.rs:2:15
+  |
+2 |     fn method(self) {}
+  |               ^^^^ doesn't have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `Self`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait&gt;
+  = note: all local variables must have a statically known size
+  = help: unsized locals are gated as an unstable feature
+help: consider further restricting `Self`
+  |
+2 |     fn method(self) where Self: std::marker::Sized {}
+  |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0277]: the size for values of type `str` cannot be known at compilation time
+ --&gt; src/lib.rs:6:15
+  |
+6 |     fn method(self) {}
+  |               ^^^^ doesn't have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `str`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait&gt;
+  = note: all local variables must have a statically known size
+  = help: unsized locals are gated as an unstable feature
+</code></pre><p>若是想通过值传递 self，可以通过显式地将 trait 约束为 Sized 来修复第一个错误：</p><pre><code class=language-rust>trait Trait: Sized {
+    fn method(self) {} // ✅
+}
+
+impl Trait for str { // ❌
+    fn method(self) {}
+}
+</code></pre><p>现在抛出：</p><pre><code class=language-rust>error[E0277]: the size for values of type `str` cannot be known at compilation time
+ --&gt; src/lib.rs:7:6
+  |
+1 | trait Trait: Sized {
+  |              ----- required by this bound in `Trait`
+...
+7 | impl Trait for str {
+  |      ^^^^^ doesn't have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `str`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait&gt;
+</code></pre><p>这倒可以理解，毕竟当我们将 trait 约束为 Sized 时，就意味着无法再为 str 等未定大小类型实现它。另一方面，如果真想为 str 实现该 trait 呢？解决方案是保持 trait 为 ?Sized，并通过引用来传递 self：</p><pre><code class=language-rust>trait Trait {
+    fn method(&amp;self) {} // ✅
+}
+
+impl Trait for str {
+    fn method(&amp;self) {} // ✅
+}
+</code></pre><p>与其将整个 trait 标记为 ?Sized 或 Sized，更精微准确的做法是将单个方法标记为 Sized，如下所示：</p><pre><code class=language-rust>trait Trait {
+    fn method(self) where Self: Sized {}
+}
+
+impl Trait for str {} // ✅!?
+
+fn main() {
+    &quot;str&quot;.method(); // ❌
+}
+</code></pre><p>不可思议，Rust 编译了 impl Trait for str {}，没有发出任何警告！好在在未定大小类型上调用 method 时，它最终能捕获到该错误，一切正常。这一表现略显古怪，但它却为实现 trait 时提供了些灵活性——可以为未定大小类型实现具有 Sized 的方法，只要你别去调用这些 Sized 方法即可。</p><pre><code class=language-rust>trait Trait {
+    fn method(self) where Self: Sized {}
+    fn method2(&amp;self) {}
+}
+
+impl Trait for str {} // ✅
+
+fn main() {
+    // 别去调用 &quot;method&quot; 就没事儿
+    &quot;str&quot;.method2(); // ✅
+}
+</code></pre><p>现在回到最初的问题，为什么 trait 默认是 ?Sized 的？答案在于 trait 对象。trait 对象本质上是未定大小的，毕竟任何大小的类型都可以实现某个 trait 。因此，若 Trait: ?Sized，则只能为 dyn Trait 实现 Trait。用代码表示如下：</p><pre><code class=language-rust>trait Trait: ?Sized {}
+
+// 上面是 **必须** 的
+
+impl Trait for dyn Trait {
+    // 此处已被编译器施法
+}
+
+// 由于 `dyn Trait` 是未定大小的
+// 现在我们可以在程序中使用 `dyn Trait` 了
+
+fn function(t: &amp;dyn Trait) {} // ✅
+</code></pre><p>如果尝试编译上面的程序，会得到以下错误：</p><pre><code class=language-rust>error[E0371]: the object type `(dyn Trait + 'static)` automatically implements the trait `Trait`
+ --&gt; src/lib.rs:5:1
+  |
+5 | impl Trait for dyn Trait {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^ `(dyn Trait + 'static)` automatically implements trait `Trait`
+</code></pre><p>编译器告诫我们冷静下来，因为它会自动为 dyn Trait 提供 Trait 的实现。再次强调，由于 dyn Trait 是未定大小的，编译器只能在 Trait: ?Sized 的情况下提供这个实现。如果我们将 Trait 约束为 Sized，它就变成了 “对象不安全”（object unsafe），这意味着无法将实现了 Trait 的类型转换为 dyn Trait 的 trait 对象。下面的程序如预期一样编译失败：</p><pre><code class=language-rust>trait Trait: Sized {}
+
+fn function(t: &amp;dyn Trait) {} // ❌
+</code></pre><p>抛出：</p><pre><code class=language-rust>error[E0038]: the trait `Trait` cannot be made into an object
+ --&gt; src/lib.rs:3:18
+  |
+1 | trait Trait: Sized {}
+  |       -----  ----- ...because it requires `Self: Sized`
+  |       |
+  |       this trait cannot be made into an object...
+2 | 
+3 | fn function(t: &amp;dyn Trait) {}
+  |                ^^^^^^^^^^ the trait `Trait` cannot be made into an object
+</code></pre><p>接下来尝试创建一个具有 Sized 方法的 ?Sized trait，并看看是否可以将其转换为 trait 对象：</p><pre><code class=language-rust>trait Trait {
+    fn method(self) where Self: Sized {}
+    fn method2(&amp;self) {}
+}
+
+fn function(arg: &amp;dyn Trait) { // ✅
+    arg.method(); // ❌
+    arg.method2(); // ✅
+}
+</code></pre><p>正如之前看到的，只要我们不在 trait 对象上调用 Sized 方法，一切都没问题。</p><p>主要收获</p><ul><li>默认情况下，所有 trait 都是 ?Sized 的</li><li>若 impl Trait for dyn Trait ，必须有 Trait: ?Sized</li><li>可以在各个方法上单独采用 Self: Sized</li><li>通过 Sized 约束的 trait 无法转换为 trait 对象</li></ul><h4 id=trait-对象的限制>Trait 对象的限制<a hidden class=anchor aria-hidden=true href=#trait-对象的限制>#</a></h4><p>即使某 trait 是对象安全（object-safe）的，仍会存在一些和大小相关的边界情况，它们限制了可以转换为 trait 对象的类型以及 trait 对象可以表示的 trait 数量、类型。</p><p>无法将未定大小类型转换为 trait 对象</p><pre><code class=language-rust>fn generic&lt;T: ToString&gt;(t: T) {}
+fn trait_object(t: &amp;dyn ToString) {}
+
+fn main() {
+    generic(String::from(&quot;String&quot;)); // ✅
+    generic(&quot;str&quot;); // ✅
+    trait_object(&amp;String::from(&quot;String&quot;)); // ✅ - 未定大小类型强转
+    trait_object(&quot;str&quot;); // ❌ - 无法进行未定大小类型强转
+}
+</code></pre><p>抛出:</p><pre><code class=language-rust>error[E0277]: the size for values of type `str` cannot be known at compilation time
+ --&gt; src/main.rs:8:18
+  |
+8 |     trait_object(&quot;str&quot;);
+  |                  ^^^^^ doesn't have a size known at compile-time
+  |
+  = help: the trait `std::marker::Sized` is not implemented for `str`
+  = note: to learn more, visit &lt;https://doc.rust-lang.org/book/ch19-04-advanced-types.html#dynamically-sized-types-and-the-sized-trait&gt;
+  = note: required for the cast to the object type `dyn std::string::ToString`
+</code></pre><p>将 &amp;String 传递给接收 &amp;dyn ToString 的函数能够正常工作，这是因为强制类型转换。String 实现了 ToString，而我们可以通过未定大小强转将固定大小类型（如 String）转换为未定大小类型（如 dyn ToString）。str 也实现了 ToString，将 str 转换为 dyn ToString 也需要未定大小强转，但 str 已经是未定大小的了！那又怎能将一个已是未定大小的类型转换为另一个未定大小的类型呢？</p><p>&amp;str 指针是双宽的，分别存储了指向数据的指针和数据的长度。&amp;dyn ToString 指针也是双宽的，存储了指向数据和指向虚表的指针。而将 &amp;str 强制转换为 &amp;dyn ToString 需要三个宽席的指针，用于存储指向数据的指针、数据的长度和指向虚表的指针。Rust 不支持三个宽度的指针，因此无法将未定大小类型转换为 trait 对象。</p><p>上面两段以表格形式总结如下：</p><table><thead><tr><th>类型</th><th>指向数据的指针</th><th>数据的长度</th><th>指向虚表的指针</th><th>总宽度</th></tr></thead><tbody><tr><td>&amp;String</td><td>✅</td><td>❌</td><td>❌</td><td>1 ✅</td></tr><tr><td>&amp;str</td><td>✅</td><td>✅</td><td>❌</td><td>2 ✅</td></tr><tr><td>&amp;String as &amp;dyn ToString</td><td>✅</td><td>❌</td><td>✅</td><td>2 ✅</td></tr><tr><td>&amp;str as &amp;dyn ToString</td><td>✅</td><td>✅</td><td>✅</td><td>3 ❌</td></tr></tbody></table><p>无法创建多 trait 对象</p><pre><code class=language-rust>trait Trait {}
+trait Trait2 {}
+
+fn function(t: &amp;(dyn Trait + Trait2)) {}
+</code></pre><p>抛出:</p><pre><code class=language-rust>error[E0225]: only auto traits can be used as additional traits in a trait object
+ --&gt; src/lib.rs:4:30
+  |
+4 | fn function(t: &amp;(dyn Trait + Trait2)) {}
+  |                      -----   ^^^^^^
+  |                      |       |
+  |                      |       additional non-auto trait
+  |                      |       trait alias used in trait object type (additional use)
+  |                      first non-auto trait
+  |                      trait alias used in trait object type (first use)
+</code></pre><p>记住，trait 对象的指针是双宽的：它存储着一个指向数据的指针和另一个指向虚表的指针，但此处有两个 trait，也就有两个虚表，这就需要将 &(dyn Trait + Trait2) 指针扩展为 3 个宽度（所以上述代码会报错）。而自动 trait（如 Sync 和 Send）是被允许的，毕竟它们没有方法，也就没有虚表。</p><p>解决此问题的方法是使用另一个 trait 将虚表合并起来，如下所示：</p><pre><code class=language-rust>trait Trait {
+    fn method(&amp;self) {}
+}
+
+trait Trait2 {
+    fn method2(&amp;self) {}
+}
+
+trait Trait3: Trait + Trait2 {}
+
+// 为同时实现了 Trait 和 Trait2 的类型 Trait3 自动提供默认实现
+impl&lt;T: Trait + Trait2&gt; Trait3 for T {}
+
+// 将 `dyn Trait + Trait2` 改为 `dyn Trait3` 
+fn function(t: &amp;dyn Trait3) {
+    t.method(); // ✅
+    t.method2(); // ✅
+}
+</code></pre><p>该变通方法的一个缺点是：Rust 不支持向上转换回 supertrait 类型。也就是说，对于 dyn Trait3，并不能将其用在需要 dyn Trait 或 dyn Trait2 的地方。以下程序无法编译：</p><pre><code class=language-rust>trait Trait {
+    fn method(&amp;self) {}
+}
+
+trait Trait2 {
+    fn method2(&amp;self) {}
+}
+
+trait Trait3: Trait + Trait2 {}
+
+impl&lt;T: Trait + Trait2&gt; Trait3 for T {}
+
+struct Struct;
+impl Trait for Struct {}
+impl Trait2 for Struct {}
+
+fn takes_trait(t: &amp;dyn Trait) {}
+fn takes_trait2(t: &amp;dyn Trait2) {}
+
+fn main() {
+    let t: &amp;dyn Trait3 = &amp;Struct;
+    takes_trait(t); // ❌
+    takes_trait2(t); // ❌
+}
+</code></pre><p>抛出:</p><pre><code class=language-rust>error[E0308]: mismatched types
+  --&gt; src/main.rs:22:17
+   |
+22 |     takes_trait(t);
+   |                 ^ expected trait `Trait`, found trait `Trait3`
+   |
+   = note: expected reference `&amp;dyn Trait`
+              found reference `&amp;dyn Trait3`
+
+error[E0308]: mismatched types
+  --&gt; src/main.rs:23:18
+   |
+23 |     takes_trait2(t);
+   |                  ^ expected trait `Trait2`, found trait `Trait3`
+   |
+   = note: expected reference `&amp;dyn Trait2`
+              found reference `&amp;dyn Trait3`
+</code></pre><p>原因是在于尽管 dyn Trait3 包含了 dyn Trait 和 dyn Trait2 的所有方法，但它在某种意义上算作一个不同的类型，它与 dyn Trait 和 dyn Trait2 有着不同的虚表。再次变通的办法是添加显式的类型转换方法：</p><pre><code class=language-rust>trait Trait {}
+trait Trait2 {}
+
+trait Trait3: Trait + Trait2 {
+    fn as_trait(&amp;self) -&gt; &amp;dyn Trait;
+    fn as_trait2(&amp;self) -&gt; &amp;dyn Trait2;
+}
+
+impl&lt;T: Trait + Trait2&gt; Trait3 for T {
+    fn as_trait(&amp;self) -&gt; &amp;dyn Trait {
+        self
+    }
+    fn as_trait2(&amp;self) -&gt; &amp;dyn Trait2 {
+        self
+    }
+}
+
+struct Struct;
+impl Trait for Struct {}
+impl Trait2 for Struct {}
+
+fn takes_trait(t: &amp;dyn Trait) {}
+fn takes_trait2(t: &amp;dyn Trait2) {}
+
+fn main() {
+    let t: &amp;dyn Trait3 = &amp;Struct;
+    takes_trait(t.as_trait()); // ✅
+    takes_trait2(t.as_trait2()); // ✅
+}
+</code></pre><p>这一解决办法简单又直接，而且看起来像是 Rust 编译器可以自动搞定的事情。Rust 在执行解引用和未定大小强转时表现得毫不犹豫，但又为什么没有向上游 trait 的强制转换呢？这个问题很好，答案也很熟悉：Rust 核心团队正在致力于其他优先级更高、影响更大的功能。行吧。</p><p>主要收获</p><ul><li>Rust 不支持超过 2 个宽度的指针，因此：<ul><li>无法将未定大小类型转换为 trait 对象</li><li>无法创建多 trait 对象，但可以通过将多个 trait 合并为一个来解决该问题</li></ul></li></ul><h4 id=用户自定义的未定大小类型>用户自定义的未定大小类型<a hidden class=anchor aria-hidden=true href=#用户自定义的未定大小类型>#</a></h4><pre><code class=language-rust>struct Unsized {
+    unsized_field: [i32],
+}
+</code></pre><p>可以通过给结构体添加一个未定大小的字段来定义一个未定大小的结构体。未定大小的结构体只能有一个未定大小的字段，而且该字段必须是结构体的最后一个字段。这样做是为了让编译器能够在编译时确定结构体中各个字段的起始偏移量，以便高效、快速地访问它们。此外，使用双宽度指针最多只能追踪一个未定大小的字段，毕竟更多的未定大小字段将需要更多的宽度。</p><p>那么我们该如何实例化这个结构体呢？和其它未定大小类型一样，首先需要创建一个固定大小的版本，然后将其转换为未定大小的版本。然而，根据定义，Unsized 总是未定大小的，无法创建一个固定大小的版本！唯一的解决方法是将该结构体定义为泛型，这样它就可以同时存在固定大小和未定大小的版本：</p><pre><code class=language-rust>struct MaybeSized&lt;T: ?Sized&gt; {
+    maybe_sized: T,
+}
+
+fn main() {
+    // 未定大小强转，从 MaybeSized&lt;[i32; 3]&gt; 至 MaybeSized&lt;[i32]&gt;
+    let ms: &amp;MaybeSized&lt;[i32]&gt; = &amp;MaybeSized { maybe_sized: [1, 2, 3] };
+}
+</code></pre><p>它有何使用场景呢？实际上，并没有什么特别引人注目的使用场景:) 用户自定义的未定大小类型目前还是个不成熟的特性，其限制超过了其好处。此处提及只是为了本文完整性的考虑。</p><p>小知识： std::ffi::OsStr和std::path::Path 是标准库中的两个未定大小类型的结构体，之前你可能使用过它们却没有意识到！</p><p>主要收获</p><ul><li>用户自定义的未定大小类型目前还是个不成熟的特性，其限制超过了其好处。</li></ul><h3 id=零大小类型>零大小类型<a hidden class=anchor aria-hidden=true href=#零大小类型>#</a></h3><p>零大小类型（ZST）一开始听起来很奇特，但其实它们在各种场景都被使用。</p><h4 id=单元类型unit-type>单元类型（unit type）<a hidden class=anchor aria-hidden=true href=#单元类型unit-type>#</a></h4><p>最常见的零大小类型是单元类型：()。所有空代码块 {} 的求值结果均是 ()。若代码块非空但其最后一个表达式使用分号 ; 舍弃时，其求值结果也是 ()。例如：</p><pre><code class=language-rust>fn main() {
+    let a: () = {};
+    let b: i32 = {
+        5
+    };
+    let c: () = {
+        5;
+    };
+}
+</code></pre><p>默认情况下，没有显式指定返回类型的函数均返回 ()。</p><pre><code class=language-rust>// 带语法糖
+fn function() {}
+
+// 去糖后
+fn function() -&gt; () {}
+</code></pre><p>由于 () 占用零字节，所有 () 的实例都相同，这使得实现其 Default、PartialEq 及 Ord 非常简单：</p><pre><code class=language-rust>use std::cmp::Ordering;
+
+impl Default for () {
+    fn default() {}
+}
+
+impl PartialEq for () {
+    fn eq(&amp;self, _other: &amp;()) -&gt; bool {
+        true
+    }
+    fn ne(&amp;self, _other: &amp;()) -&gt; bool {
+        false
+    }
+}
+
+impl Ord for () {
+    fn cmp(&amp;self, _other: &amp;()) -&gt; Ordering {
+        Ordering::Equal
+    }
+}
+</code></pre><p>编译器能够理解 () 为零大小，并优化与 () 实例相关的交互操作。例如，Vec&lt;()> 不会进行任何堆分配，从 Vec 中 push 或 pop () 只会递增或递减其 len 字段：</p><pre><code class=language-rust>fn main() {
+    // “存储”无限多个 () 所需的全部容量是：零容量
+    let mut vec: Vec&lt;()&gt; = Vec::with_capacity(0);
+    // 不会导致堆分配或 vec 容量的变化
+    vec.push(()); // len++
+    vec.push(()); // len++
+    vec.push(()); // len++
+    vec.pop(); // len--
+    assert_eq!(2, vec.len());
+}
+</code></pre><p>上面的例子并没什么实际用处，但是，是否可以在某种情况下以一种有意义的方式利用上述理念呢？必然可以，比如可以将 Value 设置为 ()，从 HashMap&lt;Key, Value> 中获得高效的 HashSet<key> 实现，而这正是 Rust 标准库中 HashSet 的工作方式：</p><pre><code class=language-rust>// std::collections::HashSet
+pub struct HashSet&lt;T&gt; {
+    map: HashMap&lt;T, ()&gt;,
+}
+</code></pre><p>主要收获</p><ul><li>所有 ZST 实例互相都是等价的</li><li>Rust 编译器清楚如何优化与 ZST 的交互</li></ul><h4 id=单元结构体unit-struct>单元结构体（unit struct）<a hidden class=anchor aria-hidden=true href=#单元结构体unit-struct>#</a></h4><p>单元结构体是指没有任何字段（成员变量）的结构体，例如：</p><pre><code class=language-rust>struct Struct;
+</code></pre><p>有一些特性使得单元结构体比 () 更具价值：</p><ul><li>可以在自定义的单元结构体上实现任意想要的 trait，Rust trait 所遵从的孤儿原则会阻止我们为 () 实现 trait，这是由于其在标准库中已经定义</li><li>可以根据程序上下文，为单元结构体赋予有意义的名称</li><li>单元结构体和所有结构体一样，默认情况下都是不可复制的，这在程序上下文中可能很重要。</li></ul><h4 id=never-类型>Never 类型<a hidden class=anchor aria-hidden=true href=#never-类型>#</a></h4><p>Never 类型可算作第二常见的零大小类型（ZST）：!。它之所以被称为 never 类型，是因为其代表的计算永远不会解析成任何值。</p><p>! 与 () 不同，它有一些有趣的特性：</p><ul><li>! 可以强制转换为任意其他类型</li><li>不可能创建 ! 的实例</li></ul><p>第一个特性非常有用，使得我们能够这样便捷地使用宏：</p><pre><code class=language-rust>// 便于快速形成原型
+fn example&lt;T&gt;(t: &amp;[T]) -&gt; Vec&lt;T&gt; {
+    unimplemented!() // ! 强转为 Vec&lt;T&gt;
+}
+
+fn example2() -&gt; i32 {
+    // 可以看出此次调用 parse 永远不会失败
+    match &quot;123&quot;.parse::&lt;i32&gt;() {
+        Ok(num) =&gt; num,
+        Err(_) =&gt; unreachable!(), // ! 强转为 i32
+    }
+}
+
+fn example3(some_condition: bool) -&gt; &amp;'static str {
+    if !some_condition {
+        panic!() // ! 强转为 &amp;str
+    } else {
+        &quot;str&quot;
+    }
+}
+</code></pre><p>break、 continue 及 return 表达式也是 ! 类型:</p><pre><code class=language-rust>fn example() -&gt; i32 {
+    // 此处 x 可以设为任意类型，
+    // 因为该代码块不返回任何值。
+    let x: String = {
+        return 123 // ! 强转为 String
+    };
+}
+
+fn example2(nums: &amp;[i32]) -&gt; Vec&lt;i32&gt; {
+    let mut filtered = Vec::new();
+    for num in nums {
+        filtered.push(
+            if *num &lt; 0 {
+                break // ! 强转为 i32
+            } else if *num % 2 == 0 {
+                *num
+            } else {
+                continue // ! 强转为 i32
+            }
+        );
+    }
+    filtered
+}
+</code></pre><p>第二个有趣的特性是：! 允许在类型层面上将某些状态标记为“不可能的”。以下面这个函数签名为例：</p><pre><code class=language-rust>fn function() -&gt; Result&lt;Success, Error&gt;;
+</code></pre><p>我们知道，如果函数成功返回，Result 将包含某个类型为 Success 的实例，如果出现错误，Result 将包含某个类型为 Error 的实例。接下来将其与该函数签名进行比较：</p><pre><code class=language-rust>fn function() -&gt; Result&lt;Success, !&gt;;
+</code></pre><p>我们知道，如果函数成功返回，Result 将包含某个类型为 Success 的实例，如果出现错误&mldr;等等，它永远不会出错，因为无法创建 ! 的实例。根据上述函数签名可知该函数永远不会出错。那么下面这个函数签名呢：</p><pre><code class=language-rust>fn function() -&gt; Result&lt;!, Error&gt;;
+</code></pre><p>与之前相反，如果该函数返回，我们知道它一定是出错了，毕竟它不可能成功。</p><p>前一个例子的实际应用是为 String 实现 FromStr，将 &amp;str 转换为 String 不可能失败：</p><pre><code class=language-rust>#![feature(never_type)]
+
+use std::str::FromStr;
+
+impl FromStr for String {
+    type Err = !;
+    fn from_str(s: &amp;str) -&gt; Result&lt;String, Self::Err&gt; {
+        Ok(String::from(s))
+    }
+}
+</code></pre><p>后一个例子的实际应用是：运行无限循环的函数，比如一个响应客户端请求的服务器，除非发生错误否则永远不会返回：</p><pre><code class=language-rust>#![feature(never_type)]
+
+fn run_server() -&gt; Result&lt;!, ConnectionError&gt; {
+    loop {
+        let (request, response) = get_request()?;
+        let result = request.process();
+        response.send(result);
+    }
+}
+</code></pre><p>在 Rust 内部使用 never 类型是可行的，但在用户代码层面使用它仍被视为实验性质的，因此需要使用 never_type 特性标识。</p><p>主要收获</p><ul><li>! 可以强制转换为其他任何类型</li><li>不能创建!的实例，但可以使用它在类型层面上标记某些不可能的状态</li></ul><h4 id=用户自定义的伪-never-类型>用户自定义的伪 Never 类型<a hidden class=anchor aria-hidden=true href=#用户自定义的伪-never-类型>#</a></h4><p>尽管不能定义一个可以强制转换为任意其他类型的类型，但却可以定义一个无法创建实例的类型。例如，没有任何变体的枚举类型：</p><pre><code class=language-rust>enum Void {}
+</code></pre><p>这样一来就可以从上一节的两个例子中移除 feature 标识，并使用稳定版的 Rust 来实现它们：</p><pre><code class=language-rust>enum Void {}
+
+// 示例 1
+impl FromStr for String {
+    type Err = Void;
+    fn from_str(s: &amp;str) -&gt; Result&lt;String, Self::Err&gt; {
+        Ok(String::from(s))
+    }
+}
+
+// 示例 2
+fn run_server() -&gt; Result&lt;Void, ConnectionError&gt; {
+    loop {
+        let (request, response) = get_request()?;
+        let result = request.process();
+        response.send(result);
+    }
+}
+</code></pre><p>其实 Rust 标准库正是这么搞的，String 在实现 FromStr 时的 Err 类型用的是 std::convert::Infallible，其定义为：</p><pre><code class=language-rust>pub enum Infallible {}
+</code></pre><h4 id=phantomdata>PhantomData<a hidden class=anchor aria-hidden=true href=#phantomdata>#</a></h4><p>第三个最常用的零大小类型（ZST）可能便是 PhantomData。PhantomData 是个零大小的标记结构体，包含它的结构体可以用它来“标记”其具有特定属性。它就像是 自动标记 trait （例如Sized、Send和Sync）的表亲，但由于它是一个结构体，使用方式会略有不同。详细解释 PhantomData 并探讨其所有用法已超出本文的范围，这里只简要介绍一个简单的例子。回想一下之前提到过的代码片段：</p><pre><code class=language-rust>#![feature(negative_impls)]
+
+// 该类型是 Send 及 Sync
+struct Struct;
+
+// 取消 Send trait
+impl !Send for Struct {}
+
+// 取消 Sync trait
+impl !Sync for Struct {}
+</code></pre><p>很遗憾此处不得不使用 feature 标识，但能否只使用稳定版的 Rust 来实现相同的效果呢？我们已知，只有当一个类型的所有成员都是 Send 且 Sync 时，该类型才是 Send 且 Sync 的。因此可以向 Struct 添加一个 !Send 且 !Sync 的成员，例如 Rc&lt;()>：</p><pre><code class=language-rust>use std::rc::Rc;
+
+// 该类型不是 Send 或 Sync
+struct Struct {
+    // 为每个实例增加 8 个字节
+    _not_send_or_sync: Rc&lt;()&gt;,
+}
+</code></pre><p>以上方式并不理想，因为它会增加各 Struct 实例的大小，而且每次想要创建 Struct 时，还需要无中生有个 Rc&lt;()> 出来。由于 PhantomData 是零大小类型（ZST），它解决了这俩问题：</p><pre><code class=language-rust>use std::rc::Rc;
+use std::marker::PhantomData;
+
+type NotSendOrSyncPhantom = PhantomData&lt;Rc&lt;()&gt;&gt;;
+
+// 该类型不是 Send 或 Sync
+struct Struct {
+    // 没有增加其实例的大小
+    _not_send_or_sync: NotSendOrSyncPhantom,
+}
+</code></pre><p>主要收获</p><ul><li>PhantomData 是个零大小的标记结构体，包含它的结构体可以用它来“标记”其具有特定属性</li></ul><h3 id=结论>结论<a hidden class=anchor aria-hidden=true href=#结论>#</a></h3><ul><li>只有固定大小类型的实例可以放在栈上，也就是说，可以按值传递</li><li>未定大小类型的实例无法放在栈上，必须通过引用进行传递</li><li>指向未定大小类型的指针是双宽度的，因为除了指向数据之外，它们还有额外的信息要管理，用以跟踪数据的长度或者指向虚表</li><li>Sized 是 “自动” 标记 trait</li><li>所有的泛型类型参数默认情况下都会自动绑定为 Sized</li><li>若有泛型函数，它接收一个指针后面的参数 T，诸如 &amp;T、Box<t>、Rc<t> 等等，此时几乎总是希望使用 T: ?Sized 取消掉默认的 Sized 约束</li><li>利用切片和 Rust 的自动类型转换可以编写灵活的 API</li><li>默认情况下，所有 trait 都是 ?Sized 的</li><li>若 impl Trait for dyn Trait ，必须有 Trait: ?Sized</li><li>可以在各个方法上单独采用 Self: Sized</li><li>通过 Sized 约束的 trait 无法转换为 trait 对象</li><li>Rust 不支持超过 2 个宽度的指针，因此：<ul><li>无法将未定大小类型转换为 trait 对象</li><li>无法创建多 trait 对象，但可以通过将多个 trait 合并为一个来解决该问题</li></ul></li><li>用户自定义的未定大小类型目前还是个不成熟的特性，其限制超过了其好处。</li><li>所有 ZST 实例互相都是等价的</li><li>Rust 编译器清楚如何优化与 ZST 的交互</li><li>! 可以强制转换为其他任何类型</li><li>不能创建!的实例，但可以使用它在类型层面上标记某些不可能的状态</li><li>PhantomData 是个零大小的标记结构体，包含它的结构体可以用它来“标记”其具有特定属性</li></ul></div><div class=post-reward><div style=padding:0;margin:0;width:100%;font-size:16px;text-align:center><div id=QR style=opacity:0><div id=wechat style=display:inline-block><a class=fancybox rel=group><img id=wechat_qr src=https://lorenwe.eu.org/img/wechat_pay.png alt=wechat_pay></a><p>微信</p></div><div id=alipay style=display:inline-block><a class=fancybox rel=group><img id=alipay_qr src=https://lorenwe.eu.org/img/alipay.png alt=alipay></a><p>支付宝</p></div></div><button id=rewardButton onclick='var qr=document.getElementById("QR");qr.style.opacity==="0"?qr.style.opacity="1":qr.style.opacity="0"'>
+<span>🧧 鼓励</span></button></div></div><footer class=post-footer><nav class=paginav><a class=next href=https://lorenwe.eu.org/posts/tech/%E7%90%86%E8%A7%A3rust%E4%B8%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84strstr%E4%B8%8Estring%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/><span class=title>下一页 »</span><br><span>理解 Rust 中字符串的 str, &amp;str 与 String 类型的区别</span></a></nav></footer></div><div id=giscus-comment></div><script>function sendMessage(e){const t=document.querySelector("iframe.giscus-frame");if(!t||!t.contentWindow)return;t.contentWindow.postMessage({giscus:e},"https://giscus.app")}function createGusicScript(){const t=document.querySelector("#giscus-comment"),n=localStorage.getItem("pref-theme");let e=document.createElement("script");e.src="https://giscus.app/client.js",e.setAttribute("data-repo","lorenwe/lorenwe.github.io"),e.setAttribute("data-repo-id","MDEwOlJlcG9zaXRvcnk3NDY0NzM4MQ=="),e.setAttribute("data-category","Announcements"),e.setAttribute("data-category-id","DIC_kwDOBHMHVc4CizTN"),e.setAttribute("data-mapping","title"),e.setAttribute("data-strict","0"),e.setAttribute("data-reactions-enabled","1"),e.setAttribute("data-emit-metadata","0"),e.setAttribute("data-input-position","bottom"),e.setAttribute("data-theme",n),e.setAttribute("data-lang","zh-CN"),e.setAttribute("data-loading","lazy"),e.setAttribute("crossorigin","anonymous"),e.async=!0,t&&t.appendChild(e)}createGusicScript()</script></article></main><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><span class=topInner><svg class="topSvg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+<span id=read_progress></span>
+</span></a><script>document.addEventListener("scroll",function(){const t=document.getElementById("read_progress"),n=document.documentElement.scrollHeight,s=document.documentElement.clientHeight,o=document.documentElement.scrollTop||document.body.scrollTop;t.innerText=((o/(n-s)).toFixed(2)*100).toFixed(0)})</script><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>let mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>200||document.documentElement.scrollTop>200?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{(function(){document.cookie="change-themes="+escape("false")})(),document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light"),sendMessage({setConfig:{theme:"light"}})):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"),sendMessage({setConfig:{theme:"dark"}}))})</script><script>document.body.addEventListener("copy",function(e){if(window.getSelection().toString()&&window.getSelection().toString().length>50){let t=e.clipboardData||window.clipboardData;if(t){e.preventDefault();let n=window.getSelection().toString()+`\r
+
+————————————————\r
+版权声明：本文为「Lorenwe Blog」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。\r
+原文链接：`+location.href,s=window.getSelection().toString()+`\r
+
+————————————————\r
+版权声明：本文为「Lorenwe Blog」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。\r
+原文链接：`+location.href;t.setData("text/html",n),t.setData("text/plain",s)}}})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const s=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerText="复制";function i(){t.innerText="已复制！",setTimeout(()=>{t.innerText="复制"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){let t=e.textContent+`\r
+————————————————\r
+版权声明：本文为「Lorenwe Blog」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。\r
+原文链接：`+location.href;navigator.clipboard.writeText(t),i();return}const n=document.createRange();n.selectNodeContents(e);const s=window.getSelection();s.removeAllRanges(),s.addRange(n);try{document.execCommand("copy"),i()}catch{}s.removeRange(n)});let l=e.className.replaceAll("language-",""),n=document.createElement("div"),a=document.createElement("div"),r=document.createElement("div"),c=document.createElement("div"),o=document.createElement("div");o.innerText=l,n.setAttribute("class","mac-tool"),a.setAttribute("class","mac bb1"),r.setAttribute("class","mac bb2"),c.setAttribute("class","mac bb3"),o.setAttribute("class","language-type"),n.appendChild(a),n.appendChild(r),n.appendChild(c),n.appendChild(o),s.classList.contains("highlight")?(s.appendChild(t),s.appendChild(n)):s.parentNode.firstChild==s||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?(e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t),s.appendChild(n)):(e.parentNode.appendChild(t),s.appendChild(n)))})</script></body></html>

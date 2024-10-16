@@ -23,254 +23,254 @@
 </span></span><span id=post_meta_style_6><span class="fa fa-tags" style=opacity:.8></span>
 <span><span class=post-tags-meta><a href=https://lorenwe.eu.org/tags/php/ style=color:var(--secondary)!important>PHP</a>
 &nbsp;<a href=https://lorenwe.eu.org/tags/%E5%A4%A7%E6%96%87%E4%BB%B6/ style=color:var(--secondary)!important>大文件</a></span></span></span></span></div></header><aside id=toc-container class="toc-container wide"><div class=toc><details open><summary accesskey=c title="(Alt + C)"><span class=details>目录</span></summary><div class=inner><ul><li><a href=#%e8%a1%a1%e9%87%8f%e6%88%90%e5%8a%9f%e7%9a%84%e6%a0%87%e5%87%86 aria-label=衡量成功的标准>衡量成功的标准</a></li><li><a href=#%e6%88%91%e4%bb%ac%e7%9a%84%e9%80%89%e6%8b%a9%e6%98%af%e4%bb%80%e4%b9%88 aria-label=我们的选择是什么？>我们的选择是什么？</a></li><li><a href=#%e9%80%90%e8%a1%8c%e8%af%bb%e5%8f%96%e6%96%87%e4%bb%b6 aria-label=逐行读取文件>逐行读取文件</a></li><li><a href=#%e7%ae%a1%e9%81%93%e9%97%b4%e7%9a%84%e6%96%87%e4%bb%b6 aria-label=管道间的文件>管道间的文件</a></li><li><a href=#%e8%bf%87%e6%bb%a4%e5%99%a8 aria-label=过滤器>过滤器</a></li><li><a href=#%e5%ae%9a%e5%88%b6%e6%b5%81 aria-label=定制流>定制流</a></li><li><a href=#%e5%88%b6%e5%ae%9a%e8%87%aa%e5%ae%9a%e4%b9%89%e5%8d%8f%e8%ae%ae%e5%92%8c%e8%bf%87%e6%bb%a4%e5%99%a8 aria-label=制定自定义协议和过滤器>制定自定义协议和过滤器</a></li><li><a href=#%e6%80%bb%e7%bb%93 aria-label=总结>总结</a></li></ul></div></details></div></aside><script>let activeElement,elements;window.addEventListener("DOMContentLoaded",function(){checkTocPosition(),elements=document.querySelectorAll("h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]"),activeElement=elements[0];const t=encodeURI(activeElement.getAttribute("id")).toLowerCase();document.querySelector(`.inner ul li a[href="#${t}"]`).classList.add("active")},!1),window.addEventListener("resize",function(){checkTocPosition()},!1),window.addEventListener("scroll",()=>{elements&&(activeElement=Array.from(elements).find(e=>{if(getOffsetTop(e)-window.pageYOffset>0&&getOffsetTop(e)-window.pageYOffset<window.innerHeight/2)return e})||activeElement,elements.forEach(e=>{const t=encodeURI(e.getAttribute("id")).toLowerCase();e===activeElement?document.querySelector(`.inner ul li a[href="#${t}"]`).classList.add("active"):document.querySelector(`.inner ul li a[href="#${t}"]`).classList.remove("active")}))},!1);const main=parseInt(getComputedStyle(document.body).getPropertyValue("--article-width"),10),toc=parseInt(getComputedStyle(document.body).getPropertyValue("--toc-width"),10),gap=parseInt(getComputedStyle(document.body).getPropertyValue("--gap"),10);function checkTocPosition(){const e=document.body.scrollWidth;e-main-toc*2-gap*4>0?document.getElementById("toc-container").classList.add("wide"):document.getElementById("toc-container").classList.remove("wide")}function getOffsetTop(e){if(!e.getClientRects().length)return 0;let t=e.getBoundingClientRect(),n=e.ownerDocument.defaultView;return t.top+n.pageYOffset}</script><div class=post-content><p>在 <a href=https://github.com/sitepoint-editors/sitepoint-performant-reading-of-big-files-in-php>GitHub</a> 上可以找到本教程的源码。</p><h3 id=衡量成功的标准>衡量成功的标准<a hidden class=anchor aria-hidden=true href=#衡量成功的标准>#</a></h3><p>确保我们对代码有改进的唯一方法是测试一个不好的情况，然后将我们修复之后的测量与另一个进行比较。换句话说，除非我们知道“解决方案”对我们有多大的帮助（如果有的话），否则我们不知道它是否真的是一个解决方案。</p><p>这里有两个我们可以关系的衡量标准。首先是CPU使用率。我们要处理的进程有多快或多慢？第二是内存使用情况。脚本执行时需要多少内存？这两个通常是成反比的 - 这意味着我们可以以CPU使用率为代价来降低内存使用，反之亦然。</p><p>在一个异步执行模型（如多进程或多线程的PHP应用程序）中，CPU和内存的使用率是很重要的考量因素。在传统的PHP架构中，当任何一个值达到服务器的极限时，这些通常都会成为问题。</p><p>测量PHP内的CPU使用率是不切实际的。如果这是你要关注的领域，请考虑在Ubuntu或MacOS上使用类似top的工具。对于Windows，请考虑使用Linux子系统，以便在Ubuntu中使用top。</p><p>为了本教程的目的，我们将测量内存使用情况。我们将看看在“传统”的脚本中使用了多少内存。我们将执行一些优化策略并对其进行度量。最后，我希望你能够做出一个有经验的选择。
-我们查看内存使用多少的方法是：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// formatBytes is taken from the php.net documentation
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>memory_get_peak_usage</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>formatBytes</span>($bytes, $precision <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>) {
-</span></span><span style=display:flex><span>    $units <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(<span style=color:#e6db74>&#34;b&#34;</span>, <span style=color:#e6db74>&#34;kb&#34;</span>, <span style=color:#e6db74>&#34;mb&#34;</span>, <span style=color:#e6db74>&#34;gb&#34;</span>, <span style=color:#e6db74>&#34;tb&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    $bytes <span style=color:#f92672>=</span> <span style=color:#a6e22e>max</span>($bytes, <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>    $pow <span style=color:#f92672>=</span> <span style=color:#a6e22e>floor</span>(($bytes <span style=color:#f92672>?</span> <span style=color:#a6e22e>log</span>($bytes) <span style=color:#f92672>:</span> <span style=color:#ae81ff>0</span>) <span style=color:#f92672>/</span> <span style=color:#a6e22e>log</span>(<span style=color:#ae81ff>1024</span>));
-</span></span><span style=display:flex><span>    $pow <span style=color:#f92672>=</span> <span style=color:#a6e22e>min</span>($pow, <span style=color:#a6e22e>count</span>($units) <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    $bytes <span style=color:#f92672>/=</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>&lt;&lt;</span> (<span style=color:#ae81ff>10</span> <span style=color:#f92672>*</span> $pow));
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>round</span>($bytes, $precision) <span style=color:#f92672>.</span> <span style=color:#e6db74>&#34; &#34;</span> <span style=color:#f92672>.</span> $units[$pow];
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>我们将在脚本的最后使用这些函数，以便我们能够看到哪个脚本一次使用最大的内存。</p><h3 id=我们的选择是什么>我们的选择是什么？<a hidden class=anchor aria-hidden=true href=#我们的选择是什么>#</a></h3><p>这里有很多方法可以有效地读取文件。但是也有两种我们可能使用它们的情况。我们想要同时读取和处理所有数据，输出处理过的数据或根据我们所读取的内容执行其他操作。我们也可能想要转换一个数据流，而不需要真正访问的数据。
+我们查看内存使用多少的方法是：</p><pre><code class=language-php>// formatBytes is taken from the php.net documentation
+
+memory_get_peak_usage();
+
+function formatBytes($bytes, $precision = 2) {
+    $units = array(&quot;b&quot;, &quot;kb&quot;, &quot;mb&quot;, &quot;gb&quot;, &quot;tb&quot;);
+
+    $bytes = max($bytes, 0);
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+    $pow = min($pow, count($units) - 1);
+
+    $bytes /= (1 &lt;&lt; (10 * $pow));
+
+    return round($bytes, $precision) . &quot; &quot; . $units[$pow];
+}
+</code></pre><p>我们将在脚本的最后使用这些函数，以便我们能够看到哪个脚本一次使用最大的内存。</p><h3 id=我们的选择是什么>我们的选择是什么？<a hidden class=anchor aria-hidden=true href=#我们的选择是什么>#</a></h3><p>这里有很多方法可以有效地读取文件。但是也有两种我们可能使用它们的情况。我们想要同时读取和处理所有数据，输出处理过的数据或根据我们所读取的内容执行其他操作。我们也可能想要转换一个数据流，而不需要真正访问的数据。
 让我们设想一下，对于第一种情况，我们希望读取一个文件，并且每10,000行创建一个独立排队的处理作业。我们需要在内存中保留至少10000行，并将它们传递给排队的工作管理器（无论采取何种形式）。
 对于第二种情况，我们假设我们想要压缩一个特别大的API响应的内容。我们不在乎它的内容是什么，但我们需要确保它是以压缩形式备份的。
-在这两种情况下，如果我们需要读取大文件，首先，我们需要知道数据是什么。第二，我们并不在乎数据是什么。让我们来探索这些选择吧&mldr;</p><h3 id=逐行读取文件>逐行读取文件<a hidden class=anchor aria-hidden=true href=#逐行读取文件>#</a></h3><p>有许多操作文件的函数，我们把部分结合到一个简单的文件阅读器中(封装为一个方法)：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from memory.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>formatBytes</span>($bytes, $precision <span style=color:#f92672>=</span> <span style=color:#ae81ff>2</span>) {
-</span></span><span style=display:flex><span>    $units <span style=color:#f92672>=</span> <span style=color:#66d9ef>array</span>(<span style=color:#e6db74>&#34;b&#34;</span>, <span style=color:#e6db74>&#34;kb&#34;</span>, <span style=color:#e6db74>&#34;mb&#34;</span>, <span style=color:#e6db74>&#34;gb&#34;</span>, <span style=color:#e6db74>&#34;tb&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    $bytes <span style=color:#f92672>=</span> <span style=color:#a6e22e>max</span>($bytes, <span style=color:#ae81ff>0</span>);
-</span></span><span style=display:flex><span>    $pow <span style=color:#f92672>=</span> <span style=color:#a6e22e>floor</span>(($bytes <span style=color:#f92672>?</span> <span style=color:#a6e22e>log</span>($bytes) <span style=color:#f92672>:</span> <span style=color:#ae81ff>0</span>) <span style=color:#f92672>/</span> <span style=color:#a6e22e>log</span>(<span style=color:#ae81ff>1024</span>));
-</span></span><span style=display:flex><span>    $pow <span style=color:#f92672>=</span> <span style=color:#a6e22e>min</span>($pow, <span style=color:#a6e22e>count</span>($units) <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    $bytes <span style=color:#f92672>/=</span> (<span style=color:#ae81ff>1</span> <span style=color:#f92672>&lt;&lt;</span> (<span style=color:#ae81ff>10</span> <span style=color:#f92672>*</span> $pow));
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>round</span>($bytes, $precision) <span style=color:#f92672>.</span> <span style=color:#e6db74>&#34; &#34;</span> <span style=color:#f92672>.</span> $units[$pow];
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>print</span> <span style=color:#a6e22e>formatBytes</span>(<span style=color:#a6e22e>memory_get_peak_usage</span>());
-</span></span></code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from reading-files-line-by-line-1.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>readTheFile</span>($path) {
-</span></span><span style=display:flex><span>    $lines <span style=color:#f92672>=</span> [];
-</span></span><span style=display:flex><span>    $handle <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>($path, <span style=color:#e6db74>&#34;r&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span>(<span style=color:#f92672>!</span><span style=color:#a6e22e>feof</span>($handle)) {
-</span></span><span style=display:flex><span>        $lines[] <span style=color:#f92672>=</span> <span style=color:#a6e22e>trim</span>(<span style=color:#a6e22e>fgets</span>($handle));
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fclose</span>($handle);
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> $lines;
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>readTheFile</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>我们读取一个文本文件为莎士比亚全集。文件大小为5.5MB，内存占用峰值为12.8MB。现在让我们用一个生成器来读取每一行：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from reading-files-line-by-line-2.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>readTheFile</span>($path) {
-</span></span><span style=display:flex><span>    $handle <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>($path, <span style=color:#e6db74>&#34;r&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span>(<span style=color:#f92672>!</span><span style=color:#a6e22e>feof</span>($handle)) {
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>yield</span> <span style=color:#a6e22e>trim</span>(<span style=color:#a6e22e>fgets</span>($handle));
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>fclose</span>($handle);
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>readTheFile</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>文本文件大小不变，但内存使用峰值只是393KB。即使我们能把读取到的数据做一些事情也并不意味着什么。也许我们可以在看到两条空白时把文档分割成块，像这样：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from reading-files-line-by-line-3.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>$iterator <span style=color:#f92672>=</span> <span style=color:#a6e22e>readTheFile</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$buffer <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>foreach</span> ($iterator <span style=color:#66d9ef>as</span> $iteration) {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>preg_match</span>(<span style=color:#e6db74>&#34;/</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>{3}/&#34;</span>, $buffer, $matches);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>count</span>($matches)) {
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>print</span> <span style=color:#e6db74>&#34;.&#34;</span>;
-</span></span><span style=display:flex><span>        $buffer <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;&#34;</span>;
-</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>        $buffer <span style=color:#f92672>.=</span> $iteration <span style=color:#f92672>.</span> <span style=color:#a6e22e>PHP_EOL</span>;
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>猜到我们使用了多少内存吗？我们把文档分割为1216块，仍然只使用了459KB的内存，这是否让你惊讶？考虑到生成器的性质，我们使用的最多内存是使用在迭代中我们需要存储的最大文本块。在本例中，最大的块为101985字符。</p><p>我已经撰写了使用<a href=https://www.sitepoint.com/memory-performance-boosts-with-generators-and-nikiciter/>生成器提示性能</a>和<a href=https://github.com/nikic/iter>Nikita Popov的迭代器库</a>，如果你感兴趣就去看看吧！</p><p>生成器还有其它用途，但是最明显的好处就是高性能读取大文件。如果我们需要处理这些数据，生成器可能是最好的方法。</p><h3 id=管道间的文件>管道间的文件<a hidden class=anchor aria-hidden=true href=#管道间的文件>#</a></h3><p>在我们不需要处理数据的情况下，我们可以把文件数据传递到另一个文件。通常被称为管道（大概是因为我们看不到除了两端的管子里面，当然，它也是不透明的），我们可以通过使用流方法实现。让我们先写一个脚本从一个文件传到另一个文件。这样我们可以测量内存的占用情况：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from piping-files-1.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>file_put_contents</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;piping-files-1.txt&#34;</span>, <span style=color:#a6e22e>file_get_contents</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>)
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>不出所料，这个脚本使用更多的内存来进行文本文件复制。这是因为它读取(和保留)文件内容在内存中，直到它被写到新文件中。对于小文件这种方法也许没问题。当为更大的文件时，就捉襟见肘了…</p><p>让我们尝试用流(管道)来传送一个文件到另一个：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from piping-files-2.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>$handle1 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>, <span style=color:#e6db74>&#34;r&#34;</span>);
-</span></span><span style=display:flex><span>$handle2 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(<span style=color:#e6db74>&#34;piping-files-2.txt&#34;</span>, <span style=color:#e6db74>&#34;w&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>stream_copy_to_stream</span>($handle1, $handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle1);
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>这段代码稍微有点陌生。我们打开了两文件的句柄，第一个是只读模式，第二个是只写模式，然后我们从第一个复制到第二个中。最后我们关闭了它，也许使你惊讶，内存只占用了393KB</p><p>这似乎很熟悉。像代码生成器在存储它读到的每一行代码？那是因为第二个参数fgets规定了每行读多少个字节（默认值是-1或者直到下一行为止）。</p><p>第三个参数stream_copy_to_stream和第二个参数是同一类参数（默认值相同），stream_copy_to_stream一次从一个数据流里读一行，同时写到另一个数据流里。它跳过生成器只有一个值的部分（因为我们不需要这个值）。</p><p>这篇文章对于我们来说可能是没用的，所以让我们想一些我们可能会用到的例子。假设我们想从我们的CDN中输出一张图片，作为一种重定向的路由应用程序。我们可以参照下边的代码来实现它：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from piping-files-3.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>file_put_contents</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;piping-files-3.jpeg&#34;</span>, <span style=color:#a6e22e>file_get_contents</span>(
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;https://github.com/assertchris/uploads/raw/master/rick.jpg&#34;</span>
-</span></span><span style=display:flex><span>    )
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// ...or write this straight to stdout, if we don&#39;t need the memory info
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>设想一下，一个路由应用程序让我们看到这段代码。但是，我们想从CDN获取一个文件，而不是从本地的文件系统获取。我们可以用一些其他的东西来更好的替换file_get_contents（就像Guzzle），即使在引擎内部它们几乎是一样的。</p><p>图片的内存大概有581K。现在，让我们来试试这个</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from piping-files-4.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>$handle1 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;https://github.com/assertchris/uploads/raw/master/rick.jpg&#34;</span>, <span style=color:#e6db74>&#34;r&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$handle2 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;piping-files-4.jpeg&#34;</span>, <span style=color:#e6db74>&#34;w&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// ...or write this straight to stdout, if we don&#39;t need the memory info
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>stream_copy_to_stream</span>($handle1, $handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle1);
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>内存使用明显变少（大概400K），但是结果是一样的。如果我们不关注内存信息，我们依旧可以用标准模式输出。实际上，PHP提供了一个简单的方式来完成：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span>$handle1 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;https://github.com/assertchris/uploads/raw/master/rick.jpg&#34;</span>, <span style=color:#e6db74>&#34;r&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$handle2 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;php://stdout&#34;</span>, <span style=color:#e6db74>&#34;w&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>stream_copy_to_stream</span>($handle1, $handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle1);
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// require &#34;memory.php&#34;;
-</span></span></span></code></pre></div><p>其它流
-还有其它一些流，我们可以通过管道来写入和读取（或只读取/只写入）：</p><ul><li>php://stdin (只读)</li><li>php://stderr (只写, 如php://stdout)</li><li>php://input (只读) 这使我们能够访问原始请求体</li><li>php://output (只写) 让我们写入输出缓冲区</li><li>php://memory 和 php://temp (读-写) 是我们可以临时存储数据的地方。 不同之处在于一旦它变得足够大 php://temp 会将数据存储在文件系统中，而 php://memory 将一直持存储在内存中直到资源耗尽。</li></ul><h3 id=过滤器>过滤器<a hidden class=anchor aria-hidden=true href=#过滤器>#</a></h3><p>还有一个我们可以在stream上使用的技巧，称为过滤器。它们是一种中间的步骤，提供对stream数据的一些控制，但不把他们暴露给我们。想象一下，我们会使用Zip扩展名来压缩我们的shakespeare.txt文件。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from filters-1.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>$zip <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>ZipArchive</span>();
-</span></span><span style=display:flex><span>$filename <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;filters-1.zip&#34;</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$zip<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>open</span>($filename, <span style=color:#a6e22e>ZipArchive</span><span style=color:#f92672>::</span><span style=color:#a6e22e>CREATE</span>);
-</span></span><span style=display:flex><span>$zip<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>addFromString</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>, <span style=color:#a6e22e>file_get_contents</span>(<span style=color:#e6db74>&#34;shakespeare.txt&#34;</span>));
-</span></span><span style=display:flex><span>$zip<span style=color:#f92672>-&gt;</span><span style=color:#a6e22e>close</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>这是一小段整洁的代码，但它测量内存占用在10.75MB左右。使用过滤器的话，我们可以减少内存：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from filters-2.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>$handle1 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;php://filter/zlib.deflate/resource=shakespeare.txt&#34;</span>, <span style=color:#e6db74>&#34;r&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$handle2 <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;filters-2.deflated&#34;</span>, <span style=color:#e6db74>&#34;w&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>stream_copy_to_stream</span>($handle1, $handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle1);
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle2);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>require</span> <span style=color:#e6db74>&#34;memory.php&#34;</span>;
-</span></span></code></pre></div><p>此处，我们可以看到名为php://filter/zlib.deflate的过滤器，它读取并压缩资源的内容。我们可以在之后将压缩数据导出到另一个文件中。这仅使用了896KB.</p><p>我知道这是不一样的格式，或者制作zip存档是有好处的。你不得不怀疑：如果你可以选择不同的格式并节省约12倍的内存，为什么不选呢？</p><p>为了解压此数据，我们可以通过执行另一个zlib filter将压缩后的数据还原：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from filters-2.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>file_get_contents</span>(
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;php://filter/zlib.inflate/resource=filters-2.deflated&#34;</span>
-</span></span><span style=display:flex><span>);
-</span></span></code></pre></div><p>Streams have been extensively covered in Stream在“理解PHP中的流”和“<a href=https://www.sitepoint.com/using-php-streams-effectively/>高效使用PHP中的流</a>”中已经被全面介绍了。如果你喜欢一个完全不同的视角，可以阅读一下。</p><h3 id=定制流>定制流<a hidden class=anchor aria-hidden=true href=#定制流>#</a></h3><p>fopen和file_get_contents有它们自己的一套默认选项，但是这些都是完全可定制的。为了定义它们，我们需要创建一个新的流上下文：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#75715e>// from creating-contexts-1.php
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>$data <span style=color:#f92672>=</span> <span style=color:#a6e22e>join</span>(<span style=color:#e6db74>&#34;&amp;&#34;</span>, [
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;twitter=assertchris&#34;</span>,
-</span></span><span style=display:flex><span>]);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$headers <span style=color:#f92672>=</span> <span style=color:#a6e22e>join</span>(<span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\r\n</span><span style=color:#e6db74>&#34;</span>, [
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;Content-type: application/x-www-form-urlencoded&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;Content-length: &#34;</span> <span style=color:#f92672>.</span> <span style=color:#a6e22e>strlen</span>($data),
-</span></span><span style=display:flex><span>]);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$options <span style=color:#f92672>=</span> [
-</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;http&#34;</span> <span style=color:#f92672>=&gt;</span> [
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;method&#34;</span> <span style=color:#f92672>=&gt;</span> <span style=color:#e6db74>&#34;POST&#34;</span>,
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;header&#34;</span><span style=color:#f92672>=&gt;</span> $headers,
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;content&#34;</span> <span style=color:#f92672>=&gt;</span> $data,
-</span></span><span style=display:flex><span>    ],
-</span></span><span style=display:flex><span>];
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$context <span style=color:#f92672>=</span> <span style=color:#a6e22e>stream_content_create</span>($options);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$handle <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(<span style=color:#e6db74>&#34;https://example.com/register&#34;</span>, <span style=color:#e6db74>&#34;r&#34;</span>, <span style=color:#66d9ef>false</span>, $context);
-</span></span><span style=display:flex><span>$response <span style=color:#f92672>=</span> <span style=color:#a6e22e>stream_get_contents</span>($handle);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>fclose</span>($handle);
-</span></span></code></pre></div><p>在这个例子中，我们正在尝试向API发出POST请求。 API终端是安全的，但我们仍然需要使用http上下文属性（用于http和https）。我们设置一些消息头参数，并打开一个文件句柄到API。由于上下文处理写操作，我们可以将句柄打开为只读。</p><p>查看<a href=https://www.php.net/function.stream-context-create>文档</a>了解更多。</p><h3 id=制定自定义协议和过滤器>制定自定义协议和过滤器<a hidden class=anchor aria-hidden=true href=#制定自定义协议和过滤器>#</a></h3><p>在我们结束之前，让我们谈谈制定自定义协议。 如果你查看<a href=https://www.php.net/manual/en/class.streamwrapper.php>文档</a>，你可以找到一个示例类来实现：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>Protocol</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>resource</span> $context;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>__construct</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>__destruct</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>dir_closedir</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>dir_opendir</span> ( <span style=color:#a6e22e>string</span> $path , <span style=color:#a6e22e>int</span> $options )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>string</span> <span style=color:#a6e22e>dir_readdir</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>dir_rewinddir</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>mkdir</span> ( <span style=color:#a6e22e>string</span> $path , <span style=color:#a6e22e>int</span> $mode , <span style=color:#a6e22e>int</span> $options )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>rename</span> ( <span style=color:#a6e22e>string</span> $path_from , <span style=color:#a6e22e>string</span> $path_to )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>rmdir</span> ( <span style=color:#a6e22e>string</span> $path , <span style=color:#a6e22e>int</span> $options )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>resource</span> <span style=color:#a6e22e>stream_cast</span> ( <span style=color:#a6e22e>int</span> $cast_as )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>void</span> <span style=color:#a6e22e>stream_close</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_eof</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_flush</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_lock</span> ( <span style=color:#a6e22e>int</span> $operation )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_metadata</span> ( <span style=color:#a6e22e>string</span> $path , <span style=color:#a6e22e>int</span> $option , <span style=color:#a6e22e>mixed</span> $value )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_open</span> ( <span style=color:#a6e22e>string</span> $path , <span style=color:#a6e22e>string</span> $mode , <span style=color:#a6e22e>int</span> $options ,
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>string</span> <span style=color:#f92672>&amp;</span>$opened_path )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>string</span> <span style=color:#a6e22e>stream_read</span> ( <span style=color:#a6e22e>int</span> $count )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_seek</span> ( <span style=color:#a6e22e>int</span> $offset , <span style=color:#a6e22e>int</span> $whence <span style=color:#f92672>=</span> <span style=color:#a6e22e>SEEK_SET</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_set_option</span> ( <span style=color:#a6e22e>int</span> $option , <span style=color:#a6e22e>int</span> $arg1 , <span style=color:#a6e22e>int</span> $arg2 )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>array</span> <span style=color:#a6e22e>stream_stat</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>int</span> <span style=color:#a6e22e>stream_tell</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>stream_truncate</span> ( <span style=color:#a6e22e>int</span> $new_size )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>int</span> <span style=color:#a6e22e>stream_write</span> ( <span style=color:#a6e22e>string</span> $data )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>unlink</span> ( <span style=color:#a6e22e>string</span> $path )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>array</span> <span style=color:#a6e22e>url_stat</span> ( <span style=color:#a6e22e>string</span> $path , <span style=color:#a6e22e>int</span> $flags )
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>我们不打算实现其中的一个，因为我认为它应该有自己的教程。这里有很多工作需要完成。但是一旦这个工作完成，我们可以很容易地注册我们的流包装：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>in_array</span>(<span style=color:#e6db74>&#34;highlight-names&#34;</span>, <span style=color:#a6e22e>stream_get_wrappers</span>())) {
-</span></span><span style=display:flex><span>    <span style=color:#a6e22e>stream_wrapper_unregister</span>(<span style=color:#e6db74>&#34;highlight-names&#34;</span>);
-</span></span><span style=display:flex><span>}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>stream_wrapper_register</span>(<span style=color:#e6db74>&#34;highlight-names&#34;</span>, <span style=color:#e6db74>&#34;HighlightNamesProtocol&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>$highlighted <span style=color:#f92672>=</span> <span style=color:#a6e22e>file_get_contents</span>(<span style=color:#e6db74>&#34;highlight-names://story.txt&#34;</span>);
-</span></span></code></pre></div><p>同样，也可以创建自定义流过滤器。该<a href=https://www.php.net/manual/en/class.streamwrapper.php>文档</a>有一个示例过滤器类：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span><span style=color:#a6e22e>Filter</span> {
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> $filtername;
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> $params
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>int</span> <span style=color:#a6e22e>filter</span> ( <span style=color:#a6e22e>resource</span> $in , <span style=color:#a6e22e>resource</span> $out , <span style=color:#a6e22e>int</span> <span style=color:#f92672>&amp;</span>$consumed ,
-</span></span><span style=display:flex><span>        <span style=color:#a6e22e>bool</span> $closing )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>void</span> <span style=color:#a6e22e>onClose</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>public</span> <span style=color:#a6e22e>bool</span> <span style=color:#a6e22e>onCreate</span> ( <span style=color:#a6e22e>void</span> )
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>这可以很容易地注册：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php><span style=display:flex><span>$handle <span style=color:#f92672>=</span> <span style=color:#a6e22e>fopen</span>(<span style=color:#e6db74>&#34;story.txt&#34;</span>, <span style=color:#e6db74>&#34;w+&#34;</span>);
-</span></span><span style=display:flex><span><span style=color:#a6e22e>stream_filter_append</span>($handle, <span style=color:#e6db74>&#34;highlight-names&#34;</span>, <span style=color:#a6e22e>STREAM_FILTER_READ</span>);
-</span></span></code></pre></div><p>突出显示名称需要匹配新的筛选器类的filtername属性。也可以在php：//filter/highligh-names/resource=story.txt字符串中使用自定义过滤器。定义过滤器比定义协议要容易得多。因为协议需要处理目录操作，而过滤器只需处理每个数据块。</p><p>如果你有这个想法，我强烈建议你尝试创建自定义协议和过滤器。如果你可以将过滤器应用于stream_copy_to_streamoperations，那么即使在使用大容量文件时，你的应用程序也可以在没有内存的情况下使用。想象一下，编写一个调整大小的图像过滤器或加密的应用程序过滤器。</p><h3 id=总结>总结<a hidden class=anchor aria-hidden=true href=#总结>#</a></h3><p>虽然这不是我们经常遇到的问题，但在处理大文件时很容易搞砸。在异步应用程序中，当我们不注意小心使用内存的话，很容易导致整个服务器宕机。
+在这两种情况下，如果我们需要读取大文件，首先，我们需要知道数据是什么。第二，我们并不在乎数据是什么。让我们来探索这些选择吧&mldr;</p><h3 id=逐行读取文件>逐行读取文件<a hidden class=anchor aria-hidden=true href=#逐行读取文件>#</a></h3><p>有许多操作文件的函数，我们把部分结合到一个简单的文件阅读器中(封装为一个方法)：</p><pre><code class=language-php>// from memory.php
+
+function formatBytes($bytes, $precision = 2) {
+    $units = array(&quot;b&quot;, &quot;kb&quot;, &quot;mb&quot;, &quot;gb&quot;, &quot;tb&quot;);
+
+    $bytes = max($bytes, 0);
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+    $pow = min($pow, count($units) - 1);
+
+    $bytes /= (1 &lt;&lt; (10 * $pow));
+
+    return round($bytes, $precision) . &quot; &quot; . $units[$pow];
+}
+
+print formatBytes(memory_get_peak_usage());
+</code></pre><pre><code class=language-php>// from reading-files-line-by-line-1.php
+
+function readTheFile($path) {
+    $lines = [];
+    $handle = fopen($path, &quot;r&quot;);
+
+    while(!feof($handle)) {
+        $lines[] = trim(fgets($handle));
+    }
+
+    fclose($handle);
+    return $lines;
+}
+
+readTheFile(&quot;shakespeare.txt&quot;);
+
+require &quot;memory.php&quot;;
+</code></pre><p>我们读取一个文本文件为莎士比亚全集。文件大小为5.5MB，内存占用峰值为12.8MB。现在让我们用一个生成器来读取每一行：</p><pre><code class=language-php>// from reading-files-line-by-line-2.php
+
+function readTheFile($path) {
+    $handle = fopen($path, &quot;r&quot;);
+
+    while(!feof($handle)) {
+        yield trim(fgets($handle));
+    }
+
+    fclose($handle);
+}
+
+readTheFile(&quot;shakespeare.txt&quot;);
+
+require &quot;memory.php&quot;;
+</code></pre><p>文本文件大小不变，但内存使用峰值只是393KB。即使我们能把读取到的数据做一些事情也并不意味着什么。也许我们可以在看到两条空白时把文档分割成块，像这样：</p><pre><code class=language-php>// from reading-files-line-by-line-3.php
+
+$iterator = readTheFile(&quot;shakespeare.txt&quot;);
+
+$buffer = &quot;&quot;;
+
+foreach ($iterator as $iteration) {
+    preg_match(&quot;/\n{3}/&quot;, $buffer, $matches);
+
+    if (count($matches)) {
+        print &quot;.&quot;;
+        $buffer = &quot;&quot;;
+    } else {
+        $buffer .= $iteration . PHP_EOL;
+    }
+}
+
+require &quot;memory.php&quot;;
+</code></pre><p>猜到我们使用了多少内存吗？我们把文档分割为1216块，仍然只使用了459KB的内存，这是否让你惊讶？考虑到生成器的性质，我们使用的最多内存是使用在迭代中我们需要存储的最大文本块。在本例中，最大的块为101985字符。</p><p>我已经撰写了使用<a href=https://www.sitepoint.com/memory-performance-boosts-with-generators-and-nikiciter/>生成器提示性能</a>和<a href=https://github.com/nikic/iter>Nikita Popov的迭代器库</a>，如果你感兴趣就去看看吧！</p><p>生成器还有其它用途，但是最明显的好处就是高性能读取大文件。如果我们需要处理这些数据，生成器可能是最好的方法。</p><h3 id=管道间的文件>管道间的文件<a hidden class=anchor aria-hidden=true href=#管道间的文件>#</a></h3><p>在我们不需要处理数据的情况下，我们可以把文件数据传递到另一个文件。通常被称为管道（大概是因为我们看不到除了两端的管子里面，当然，它也是不透明的），我们可以通过使用流方法实现。让我们先写一个脚本从一个文件传到另一个文件。这样我们可以测量内存的占用情况：</p><pre><code class=language-php>// from piping-files-1.php
+
+file_put_contents(
+    &quot;piping-files-1.txt&quot;, file_get_contents(&quot;shakespeare.txt&quot;)
+);
+
+require &quot;memory.php&quot;;
+</code></pre><p>不出所料，这个脚本使用更多的内存来进行文本文件复制。这是因为它读取(和保留)文件内容在内存中，直到它被写到新文件中。对于小文件这种方法也许没问题。当为更大的文件时，就捉襟见肘了…</p><p>让我们尝试用流(管道)来传送一个文件到另一个：</p><pre><code class=language-php>// from piping-files-2.php
+
+$handle1 = fopen(&quot;shakespeare.txt&quot;, &quot;r&quot;);
+$handle2 = fopen(&quot;piping-files-2.txt&quot;, &quot;w&quot;);
+
+stream_copy_to_stream($handle1, $handle2);
+
+fclose($handle1);
+fclose($handle2);
+
+require &quot;memory.php&quot;;
+</code></pre><p>这段代码稍微有点陌生。我们打开了两文件的句柄，第一个是只读模式，第二个是只写模式，然后我们从第一个复制到第二个中。最后我们关闭了它，也许使你惊讶，内存只占用了393KB</p><p>这似乎很熟悉。像代码生成器在存储它读到的每一行代码？那是因为第二个参数fgets规定了每行读多少个字节（默认值是-1或者直到下一行为止）。</p><p>第三个参数stream_copy_to_stream和第二个参数是同一类参数（默认值相同），stream_copy_to_stream一次从一个数据流里读一行，同时写到另一个数据流里。它跳过生成器只有一个值的部分（因为我们不需要这个值）。</p><p>这篇文章对于我们来说可能是没用的，所以让我们想一些我们可能会用到的例子。假设我们想从我们的CDN中输出一张图片，作为一种重定向的路由应用程序。我们可以参照下边的代码来实现它：</p><pre><code class=language-php>// from piping-files-3.php
+
+file_put_contents(
+    &quot;piping-files-3.jpeg&quot;, file_get_contents(
+        &quot;https://github.com/assertchris/uploads/raw/master/rick.jpg&quot;
+    )
+);
+
+// ...or write this straight to stdout, if we don't need the memory info
+
+require &quot;memory.php&quot;;
+</code></pre><p>设想一下，一个路由应用程序让我们看到这段代码。但是，我们想从CDN获取一个文件，而不是从本地的文件系统获取。我们可以用一些其他的东西来更好的替换file_get_contents（就像Guzzle），即使在引擎内部它们几乎是一样的。</p><p>图片的内存大概有581K。现在，让我们来试试这个</p><pre><code class=language-php>// from piping-files-4.php
+
+$handle1 = fopen(
+    &quot;https://github.com/assertchris/uploads/raw/master/rick.jpg&quot;, &quot;r&quot;
+);
+
+$handle2 = fopen(
+    &quot;piping-files-4.jpeg&quot;, &quot;w&quot;
+);
+
+// ...or write this straight to stdout, if we don't need the memory info
+
+stream_copy_to_stream($handle1, $handle2);
+
+fclose($handle1);
+fclose($handle2);
+
+require &quot;memory.php&quot;;
+</code></pre><p>内存使用明显变少（大概400K），但是结果是一样的。如果我们不关注内存信息，我们依旧可以用标准模式输出。实际上，PHP提供了一个简单的方式来完成：</p><pre><code class=language-php>$handle1 = fopen(
+    &quot;https://github.com/assertchris/uploads/raw/master/rick.jpg&quot;, &quot;r&quot;
+);
+
+$handle2 = fopen(
+    &quot;php://stdout&quot;, &quot;w&quot;
+);
+
+stream_copy_to_stream($handle1, $handle2);
+
+fclose($handle1);
+fclose($handle2);
+
+// require &quot;memory.php&quot;;
+</code></pre><p>其它流
+还有其它一些流，我们可以通过管道来写入和读取（或只读取/只写入）：</p><ul><li>php://stdin (只读)</li><li>php://stderr (只写, 如php://stdout)</li><li>php://input (只读) 这使我们能够访问原始请求体</li><li>php://output (只写) 让我们写入输出缓冲区</li><li>php://memory 和 php://temp (读-写) 是我们可以临时存储数据的地方。 不同之处在于一旦它变得足够大 php://temp 会将数据存储在文件系统中，而 php://memory 将一直持存储在内存中直到资源耗尽。</li></ul><h3 id=过滤器>过滤器<a hidden class=anchor aria-hidden=true href=#过滤器>#</a></h3><p>还有一个我们可以在stream上使用的技巧，称为过滤器。它们是一种中间的步骤，提供对stream数据的一些控制，但不把他们暴露给我们。想象一下，我们会使用Zip扩展名来压缩我们的shakespeare.txt文件。</p><pre><code class=language-php>// from filters-1.php
+
+$zip = new ZipArchive();
+$filename = &quot;filters-1.zip&quot;;
+
+$zip-&gt;open($filename, ZipArchive::CREATE);
+$zip-&gt;addFromString(&quot;shakespeare.txt&quot;, file_get_contents(&quot;shakespeare.txt&quot;));
+$zip-&gt;close();
+
+require &quot;memory.php&quot;;
+</code></pre><p>这是一小段整洁的代码，但它测量内存占用在10.75MB左右。使用过滤器的话，我们可以减少内存：</p><pre><code class=language-php>// from filters-2.php
+
+$handle1 = fopen(
+    &quot;php://filter/zlib.deflate/resource=shakespeare.txt&quot;, &quot;r&quot;
+);
+
+$handle2 = fopen(
+    &quot;filters-2.deflated&quot;, &quot;w&quot;
+);
+
+stream_copy_to_stream($handle1, $handle2);
+
+fclose($handle1);
+fclose($handle2);
+
+require &quot;memory.php&quot;;
+</code></pre><p>此处，我们可以看到名为php://filter/zlib.deflate的过滤器，它读取并压缩资源的内容。我们可以在之后将压缩数据导出到另一个文件中。这仅使用了896KB.</p><p>我知道这是不一样的格式，或者制作zip存档是有好处的。你不得不怀疑：如果你可以选择不同的格式并节省约12倍的内存，为什么不选呢？</p><p>为了解压此数据，我们可以通过执行另一个zlib filter将压缩后的数据还原：</p><pre><code class=language-php>// from filters-2.php
+
+file_get_contents(
+    &quot;php://filter/zlib.inflate/resource=filters-2.deflated&quot;
+);
+</code></pre><p>Streams have been extensively covered in Stream在“理解PHP中的流”和“<a href=https://www.sitepoint.com/using-php-streams-effectively/>高效使用PHP中的流</a>”中已经被全面介绍了。如果你喜欢一个完全不同的视角，可以阅读一下。</p><h3 id=定制流>定制流<a hidden class=anchor aria-hidden=true href=#定制流>#</a></h3><p>fopen和file_get_contents有它们自己的一套默认选项，但是这些都是完全可定制的。为了定义它们，我们需要创建一个新的流上下文：</p><pre><code class=language-php>// from creating-contexts-1.php
+
+$data = join(&quot;&amp;&quot;, [
+    &quot;twitter=assertchris&quot;,
+]);
+
+$headers = join(&quot;\r\n&quot;, [
+    &quot;Content-type: application/x-www-form-urlencoded&quot;,
+    &quot;Content-length: &quot; . strlen($data),
+]);
+
+$options = [
+    &quot;http&quot; =&gt; [
+        &quot;method&quot; =&gt; &quot;POST&quot;,
+        &quot;header&quot;=&gt; $headers,
+        &quot;content&quot; =&gt; $data,
+    ],
+];
+
+$context = stream_content_create($options);
+
+$handle = fopen(&quot;https://example.com/register&quot;, &quot;r&quot;, false, $context);
+$response = stream_get_contents($handle);
+
+fclose($handle);
+</code></pre><p>在这个例子中，我们正在尝试向API发出POST请求。 API终端是安全的，但我们仍然需要使用http上下文属性（用于http和https）。我们设置一些消息头参数，并打开一个文件句柄到API。由于上下文处理写操作，我们可以将句柄打开为只读。</p><p>查看<a href=https://www.php.net/function.stream-context-create>文档</a>了解更多。</p><h3 id=制定自定义协议和过滤器>制定自定义协议和过滤器<a hidden class=anchor aria-hidden=true href=#制定自定义协议和过滤器>#</a></h3><p>在我们结束之前，让我们谈谈制定自定义协议。 如果你查看<a href=https://www.php.net/manual/en/class.streamwrapper.php>文档</a>，你可以找到一个示例类来实现：</p><pre><code class=language-php>Protocol {
+    public resource $context;
+    public __construct ( void )
+    public __destruct ( void )
+    public bool dir_closedir ( void )
+    public bool dir_opendir ( string $path , int $options )
+    public string dir_readdir ( void )
+    public bool dir_rewinddir ( void )
+    public bool mkdir ( string $path , int $mode , int $options )
+    public bool rename ( string $path_from , string $path_to )
+    public bool rmdir ( string $path , int $options )
+    public resource stream_cast ( int $cast_as )
+    public void stream_close ( void )
+    public bool stream_eof ( void )
+    public bool stream_flush ( void )
+    public bool stream_lock ( int $operation )
+    public bool stream_metadata ( string $path , int $option , mixed $value )
+    public bool stream_open ( string $path , string $mode , int $options ,
+        string &amp;$opened_path )
+    public string stream_read ( int $count )
+    public bool stream_seek ( int $offset , int $whence = SEEK_SET )
+    public bool stream_set_option ( int $option , int $arg1 , int $arg2 )
+    public array stream_stat ( void )
+    public int stream_tell ( void )
+    public bool stream_truncate ( int $new_size )
+    public int stream_write ( string $data )
+    public bool unlink ( string $path )
+    public array url_stat ( string $path , int $flags )
+}
+</code></pre><p>我们不打算实现其中的一个，因为我认为它应该有自己的教程。这里有很多工作需要完成。但是一旦这个工作完成，我们可以很容易地注册我们的流包装：</p><pre><code class=language-php>if (in_array(&quot;highlight-names&quot;, stream_get_wrappers())) {
+    stream_wrapper_unregister(&quot;highlight-names&quot;);
+}
+
+stream_wrapper_register(&quot;highlight-names&quot;, &quot;HighlightNamesProtocol&quot;);
+
+$highlighted = file_get_contents(&quot;highlight-names://story.txt&quot;);
+</code></pre><p>同样，也可以创建自定义流过滤器。该<a href=https://www.php.net/manual/en/class.streamwrapper.php>文档</a>有一个示例过滤器类：</p><pre><code class=language-php>Filter {
+    public $filtername;
+    public $params
+    public int filter ( resource $in , resource $out , int &amp;$consumed ,
+        bool $closing )
+    public void onClose ( void )
+    public bool onCreate ( void )
+}
+</code></pre><p>这可以很容易地注册：</p><pre><code class=language-php>$handle = fopen(&quot;story.txt&quot;, &quot;w+&quot;);
+stream_filter_append($handle, &quot;highlight-names&quot;, STREAM_FILTER_READ);
+</code></pre><p>突出显示名称需要匹配新的筛选器类的filtername属性。也可以在php：//filter/highligh-names/resource=story.txt字符串中使用自定义过滤器。定义过滤器比定义协议要容易得多。因为协议需要处理目录操作，而过滤器只需处理每个数据块。</p><p>如果你有这个想法，我强烈建议你尝试创建自定义协议和过滤器。如果你可以将过滤器应用于stream_copy_to_streamoperations，那么即使在使用大容量文件时，你的应用程序也可以在没有内存的情况下使用。想象一下，编写一个调整大小的图像过滤器或加密的应用程序过滤器。</p><h3 id=总结>总结<a hidden class=anchor aria-hidden=true href=#总结>#</a></h3><p>虽然这不是我们经常遇到的问题，但在处理大文件时很容易搞砸。在异步应用程序中，当我们不注意小心使用内存的话，很容易导致整个服务器宕机。
 本教程希望向你介绍一些新的想法（或者让你重新认识他们），以便你可以更多地考虑如何高效地读取和写入大型文件。当我们开始熟悉流程和生成器，并停止使用像file_get_contents这样的函数时，我们的应用程序中就会减少错误的类别，这看起来是很好。</p></div><div class=post-reward><div style=padding:0;margin:0;width:100%;font-size:16px;text-align:center><div id=QR style=opacity:0><div id=wechat style=display:inline-block><a class=fancybox rel=group><img id=wechat_qr src=https://lorenwe.eu.org/img/wechat_pay.png alt=wechat_pay></a><p>微信</p></div><div id=alipay style=display:inline-block><a class=fancybox rel=group><img id=alipay_qr src=https://lorenwe.eu.org/img/alipay.png alt=alipay></a><p>支付宝</p></div></div><button id=rewardButton onclick='var qr=document.getElementById("QR");qr.style.opacity==="0"?qr.style.opacity="1":qr.style.opacity="0"'>
 <span>🧧 鼓励</span></button></div></div><footer class=post-footer><nav class=paginav><a class=prev href=https://lorenwe.eu.org/posts/tech/%E4%BD%BF%E7%94%A8githubactions%E8%87%AA%E5%8A%A8%E9%83%A8%E7%BD%B2hugo%E7%AB%99%E7%82%B9/><span class=title>« 上一页</span><br><span>使用 GitHub Actions 自动部署 Hugo 站点</span>
 </a><a class=next href=https://lorenwe.eu.org/posts/tech/%E5%9B%9B%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84post%E6%8F%90%E4%BA%A4%E6%95%B0%E6%8D%AE%E6%96%B9%E5%BC%8F/><span class=title>下一页 »</span><br><span>四种常见的POST提交数据方式</span></a></nav></footer></div><div id=giscus-comment></div><script>function sendMessage(e){const t=document.querySelector("iframe.giscus-frame");if(!t||!t.contentWindow)return;t.contentWindow.postMessage({giscus:e},"https://giscus.app")}function createGusicScript(){const t=document.querySelector("#giscus-comment"),n=localStorage.getItem("pref-theme");let e=document.createElement("script");e.src="https://giscus.app/client.js",e.setAttribute("data-repo","lorenwe/lorenwe.github.io"),e.setAttribute("data-repo-id","MDEwOlJlcG9zaXRvcnk3NDY0NzM4MQ=="),e.setAttribute("data-category","Announcements"),e.setAttribute("data-category-id","DIC_kwDOBHMHVc4CizTN"),e.setAttribute("data-mapping","title"),e.setAttribute("data-strict","0"),e.setAttribute("data-reactions-enabled","1"),e.setAttribute("data-emit-metadata","0"),e.setAttribute("data-input-position","bottom"),e.setAttribute("data-theme",n),e.setAttribute("data-lang","zh-CN"),e.setAttribute("data-loading","lazy"),e.setAttribute("crossorigin","anonymous"),e.async=!0,t&&t.appendChild(e)}createGusicScript()</script></article></main><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><span class=topInner><svg class="topSvg" viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>

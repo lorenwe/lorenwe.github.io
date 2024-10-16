@@ -6,7 +6,29 @@
     <description>Recent content in 👨🏻‍💻 技术 on Lorenwe Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Thu, 10 Oct 2024 16:28:40 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Oct 2024 09:55:37 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust 中的 Sized</title>
+      <link>https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/</link>
+      <pubDate>Wed, 16 Oct 2024 09:55:37 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/</guid>
+      <description>&lt;p&gt;原文： &lt;a href=&#34;https://github.com/pretzelhammer/rust-blog/blob/master/posts/sizedness-in-rust.md&#34;&gt;Sizedness in Rust&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;概述&#34;&gt;概述&lt;/h3&gt;
+&lt;p&gt;Sized 其实是 Rust 中最重要的概念之一，可谓功成不居。它往往以微妙的形式与其他语言特性交织在一起，只有在形如 &amp;ldquo;x doesn&amp;rsquo;t have size known at compile time&amp;rdquo; 的错误信息中才会显露，这些错误信息对于每个 Rustacean 来说都太过熟悉了。在本文中，我们将探讨 Sized 的各种形式，包括固定大小类型、未定大小类型以及零大小类型，同时还将考察它们的用例、优势、痛点及相应解决方案。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解 Rust 中字符串的 str, &amp;str 与 String 类型的区别</title>
+      <link>https://lorenwe.eu.org/posts/tech/%E7%90%86%E8%A7%A3rust%E4%B8%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84strstr%E4%B8%8Estring%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Tue, 15 Oct 2024 15:45:24 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/%E7%90%86%E8%A7%A3rust%E4%B8%AD%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84strstr%E4%B8%8Estring%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>&lt;h3 id=&#34;字符串的类型大小和存储位置的概念定义及区分&#34;&gt;字符串的类型大小和存储位置的概念定义及区分&lt;/h3&gt;
+&lt;p&gt;在学习 Rust 的过程中，我们经常会遇到 Cannot know size until runtime: str 这样的报错，而大多数的解释都是搬运 Rust 官方文档的解释，这是由于 &lt;strong&gt;str 是动态大小类型 (Dynamic Sized Type，DST) ，因此编译器无法确定 str 类型的大小&lt;/strong&gt;。然而给我们直观的感受是 &amp;ldquo;hello&amp;rdquo; 字面量只有 5 个字节，为什么在编译期间不能确定其大小呢？&lt;/p&gt;
+&lt;p&gt;上述问题困扰了我很久，后来发现这是由于我对&lt;strong&gt;类型大小&lt;/strong&gt;与&lt;strong&gt;值大小&lt;/strong&gt;这两个概念搞混了。假设字符串字面量的类型是 str，那么考虑如下代码:&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>在windows系统下安装DockerDesktop后迁移镜像位置</title>
       <link>https://lorenwe.eu.org/posts/tech/%E5%9C%A8windows%E7%B3%BB%E7%BB%9F%E4%B8%8B%E5%AE%89%E8%A3%85dockerdesktop%E5%90%8E%E8%BF%81%E7%A7%BB%E9%95%9C%E5%83%8F%E4%BD%8D%E7%BD%AE/</link>
@@ -42,44 +64,45 @@
 &lt;/ul&gt;
 &lt;h3 id=&#34;创建-workflow-配置&#34;&gt;创建 Workflow 配置&lt;/h3&gt;
 &lt;p&gt;在 blogs 仓库下新建 .github/workflows/deploy.yml 文件。内容如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yml&#34; data-lang=&#34;yml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;deploy&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;push&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;branches&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#ae81ff&#34;&gt;main&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;deploy&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-latest&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Check out source&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;submodules&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;fetch-depth&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Setup hugo&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-hugo@v2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;hugo-version&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;latest&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;extended&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 设置是否需要 extended 版本&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Fetch Hugo Themes &lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# Fetch Hugo themes&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;git submodule update --init --recursive&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;hugo --minify&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Deploy to GitHub Pages&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-gh-pages@v3&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;deploy_key&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.DEPLOY_TOKEN }}&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 另外还支持 github_token 和 personal_token&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;external_repository&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;lorenwe/lorenwe.github.io&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 修改为你的 GitHub Pages 仓库&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;publish_branch&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;main&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;publish_dir&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;./public&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;keep_files&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;cname&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;lorenwe.eu.org&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;# 如果使用自定义域名，还需要添加下面一行配置&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;设置-ssh-key&#34;&gt;设置 SSH Key&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-yml&#34;&gt;name: deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: &amp;quot;latest&amp;quot;
+          extended: true # 设置是否需要 extended 版本
+          
+      - name: Fetch Hugo Themes  # Fetch Hugo themes
+        run: git submodule update --init --recursive
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.DEPLOY_TOKEN }} # 另外还支持 github_token 和 personal_token
+          external_repository: lorenwe/lorenwe.github.io # 修改为你的 GitHub Pages 仓库
+          publish_branch: main
+          publish_dir: ./public
+          keep_files: false
+          cname: lorenwe.eu.org # 如果使用自定义域名，还需要添加下面一行配置
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;设置-ssh-key&#34;&gt;设置 SSH Key&lt;/h3&gt;
 &lt;p&gt;GitHub Pages action 支持三种身份验证方式：&lt;/p&gt;</description>
     </item>
     
