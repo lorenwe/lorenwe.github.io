@@ -6,7 +6,26 @@
     <description>Recent content in 👨🏻‍💻 技术 on Lorenwe Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <lastBuildDate>Wed, 16 Oct 2024 09:55:37 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Oct 2024 11:14:01 +0800</lastBuildDate><atom:link href="https://lorenwe.eu.org/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust如何正确解析yaml文件</title>
+      <link>https://lorenwe.eu.org/posts/tech/rust%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%9E%90yaml%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Wed, 23 Oct 2024 11:14:01 +0800</pubDate>
+      
+      <guid>https://lorenwe.eu.org/posts/tech/rust%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E8%A7%A3%E6%9E%90yaml%E6%96%87%E4%BB%B6/</guid>
+      <description>&lt;h3 id=&#34;一简介&#34;&gt;一、简介&lt;/h3&gt;
+&lt;p&gt;serde_yaml 是 Rust 语言中一个用于序列化和反序列化 YAML 数据的库。它以其高性能和灵活性而广受欢迎，特别适用于需要处理 YAML 配置文件的项目。在这篇博客中，我们将探讨 serde_yaml 的基本用法，并提供一些实用的示例代码。&lt;/p&gt;
+&lt;h3 id=&#34;二使用场景&#34;&gt;二、使用场景&lt;/h3&gt;
+&lt;p&gt;serde_yaml 常用于以下场景：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;配置管理：许多应用程序使用 YAML 文件来存储配置参数，serde_yaml 可以轻松解析这些文件。&lt;/li&gt;
+&lt;li&gt;数据交换：在系统之间传递数据时，YAML 格式因其可读性而常被选用。&lt;/li&gt;
+&lt;li&gt;文档生成：一些工具使用 YAML 来描述文档结构，serde_yaml 可以帮助生成和解析这些文档。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;三基本使用&#34;&gt;三、基本使用&lt;/h3&gt;
+&lt;p&gt;开始使用 serde_yaml 之前，先创建一个 serde_yaml_test 项目文件夹，在文件夹中使用 &lt;code&gt;cargo init&lt;/code&gt; 初始化 rust 项目，然后在项目的 Cargo.toml 文件中添加依赖：&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Rust 中的 Sized</title>
       <link>https://lorenwe.eu.org/posts/tech/rust%E4%B8%AD%E7%9A%84sized/</link>
