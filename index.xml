@@ -208,26 +208,26 @@ jobs:
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
-          &lt;th&gt;&lt;/th&gt;
-          &lt;th&gt;&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;&lt;/th&gt;
       &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
       &lt;tr&gt;
-          &lt;td&gt;名称：&lt;/td&gt;
-          &lt;td&gt;Lorenwe Blog&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;名称：&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Lorenwe Blog&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;网址：&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://lorenwe.eu.org/&#34;&gt;https://lorenwe.eu.org/&lt;/a&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;网址：&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;https://lorenwe.eu.org/&#34;&gt;https://lorenwe.eu.org/&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;图标：&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://lorenwe.eu.org/img/kaola.png&#34;&gt;https://lorenwe.eu.org/img/kaola.png&lt;/a&gt;&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;图标：&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;&lt;a href=&#34;https://lorenwe.eu.org/img/kaola.png&#34;&gt;https://lorenwe.eu.org/img/kaola.png&lt;/a&gt;&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;描述：&lt;/td&gt;
-          &lt;td&gt;一个记录技术、阅读、生活的博客&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;描述：&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;一个记录技术、阅读、生活的博客&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
@@ -235,7 +235,8 @@ jobs:
 &lt;br/&gt;
 &lt;div style=&#34;font-size: 20px;&#34;&gt;👉友链申请要求&lt;/div&gt;
 &lt;blockquote&gt;
-&lt;p&gt;秉承互换友链原则、文章定期更新&lt;!-- 、网站在工信部备案 --&gt;、不能有太多广告、个人描述字数控制在15字内&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;秉承互换友链原则、文章定期更新&lt;!-- 、网站在工信部备案 --&gt;、不能有太多广告、个人描述字数控制在15字内&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;br/&gt;</description>
     </item>
     
@@ -249,22 +250,22 @@ jobs:
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
-          &lt;th&gt;&lt;/th&gt;
-          &lt;th&gt;&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;&lt;/th&gt;
+          &lt;th style=&#34;text-align: left&#34;&gt;&lt;/th&gt;
       &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
       &lt;tr&gt;
-          &lt;td&gt;英文名:&lt;/td&gt;
-          &lt;td&gt;Lorenwe&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;英文名:&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;Lorenwe&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;职业:&lt;/td&gt;
-          &lt;td&gt;牛马&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;职业:&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;牛马&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;运动:&lt;/td&gt;
-          &lt;td&gt;玩手机&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;运动:&lt;/td&gt;
+          &lt;td style=&#34;text-align: left&#34;&gt;玩手机&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;</description>
